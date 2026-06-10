@@ -6,7 +6,6 @@ import {
   onSnapshot,
   runTransaction,
   doc,
-  serverTimestamp,
 } from 'firebase/firestore';
 
 import type {
