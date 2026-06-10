@@ -4,8 +4,11 @@ import { useContext } from 'react';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import CustomersPage from './pages/CustomersPage';
+import CustomerProfilePage from './pages/CustomerProfilePage';
 import SalesPage from './pages/SalesPage';
+import CreateSalePage from './pages/CreateSalePage';
 import PaymentsPage from './pages/PaymentsPage';
+import RecordPaymentPage from './pages/RecordPaymentPage';
 import InstallmentsPage from './pages/InstallmentsPage';
 import LedgerPage from './pages/LedgerPage';
 
@@ -39,12 +42,24 @@ const AppRoutes = () => {
         element={user ? <CustomersPage /> : <Navigate to="/login" replace />}
       />
       <Route
+        path="/customers/:customerId"
+        element={user ? <CustomerProfilePage /> : <Navigate to="/login" replace />}
+      />
+      <Route
         path="/sales"
         element={user ? <SalesPage /> : <Navigate to="/login" replace />}
       />
       <Route
+        path="/sales/create"
+        element={user ? <CreateSalePage /> : <Navigate to="/login" replace />}
+      />
+      <Route
         path="/payments"
         element={user ? <PaymentsPage /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/payments/record"
+        element={user ? <RecordPaymentPage /> : <Navigate to="/login" replace />}
       />
       <Route
         path="/installments"

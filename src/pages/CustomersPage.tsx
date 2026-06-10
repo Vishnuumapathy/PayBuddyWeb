@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCustomers } from '../hooks/useCustomers';
 import { useAuth } from '../hooks/useAuth';
-import { createCustomer } from '../repositories/customerRepository';
+import { createCustomer, archiveCustomer } from '../repositories/customerRepository';
 import {
   PageHeader,
   DataTable,
@@ -12,6 +13,7 @@ import { formatCurrency, formatDate } from '../utils/formatters';
 import type { Customer } from '../models/paybuddy';
 
 const CustomersPage: React.FC = () => {
+  const navigate = useNavigate();
   const { customers, loading, error: fetchError } = useCustomers();
   const { vendorId } = useAuth();
 
@@ -19,6 +21,10 @@ const CustomersPage: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Archive state
+  const [customerToArchive, setCustomerToArchive] = useState<Customer | null>(null);
+  const [isArchiving, setIsArchiving] = useState(false);
 
   const handleAddCustomer = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,13 +53,32 @@ const CustomersPage: React.FC = () => {
     }
   };
 
+  const handleConfirmArchive = async () => {
+    if (!customerToArchive) return;
+    setIsArchiving(true);
+    try {
+      await archiveCustomer(customerToArchive.customerId);
+      setCustomerToArchive(null);
+    } catch (err) {
+      console.error('Archive failed:', err);
+      alert('Failed to archive customer');
+    } finally {
+      setIsArchiving(false);
+    }
+  };
+
   if (loading) return <LoadingState />;
 
   const columns = [
     {
       header: 'Name',
       accessor: (customer: Customer) => (
-        <div className="font-medium text-gray-900">{customer.name}</div>
+        <button
+          onClick={() => navigate(`/customers/${customer.customerId}`)}
+          className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors text-left"
+        >
+          {customer.name}
+        </button>
       ),
     },
     {
@@ -89,6 +114,33 @@ const CustomersPage: React.FC = () => {
     {
       header: 'Joined',
       accessor: (customer: Customer) => formatDate(customer.createdAt),
+      className: 'text-right',
+    },
+    {
+      header: 'Actions',
+      accessor: (customer: Customer) => (
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={() => navigate(`/customers/${customer.customerId}`)}
+            className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
+            title="View Profile"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setCustomerToArchive(customer)}
+            className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+            title="Archive Customer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </div>
+      ),
       className: 'text-right',
     },
   ];
@@ -164,8 +216,41 @@ const CustomersPage: React.FC = () => {
           }
         />
       )}
+
+      {/* Archive Confirmation Dialog */}
+      {customerToArchive && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 text-center">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Archive {customerToArchive.name}?</h3>
+            <p className="text-gray-500 mb-6">
+              Financial history, sales, payments and ledger records will remain preserved.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => setCustomerToArchive(null)}
+                className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmArchive}
+                disabled={isArchiving}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition-colors disabled:opacity-50"
+              >
+                {isArchiving ? 'Archiving...' : 'Archive'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default CustomersPage;
+

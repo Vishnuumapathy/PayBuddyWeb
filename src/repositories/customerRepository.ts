@@ -6,6 +6,8 @@ import {
   onSnapshot,
   doc,
   setDoc,
+  getDoc,
+  updateDoc,
 } from 'firebase/firestore';
 
 import type {
@@ -92,4 +94,102 @@ export const createCustomer = async (
   } as Customer;
 
   await setDoc(newCustomerDoc, newCustomer);
+};
+
+/**
+ * Fetches a single customer by ID.
+ *
+ * @param customerId - The ID of the customer.
+ * @returns Promise<Customer | null>
+ */
+export const getCustomerById = async (
+  customerId: string
+): Promise<Customer | null> => {
+  const customerRef = doc(db, 'customers', customerId);
+  const snapshot = await getDoc(customerRef);
+
+  if (snapshot.exists()) {
+    return {
+      ...snapshot.data(),
+      customerId: snapshot.id,
+    } as Customer;
+  }
+
+  return null;
+};
+
+/**
+ * Updates a customer's basic information.
+ *
+ * @param customerId - The ID of the customer.
+ * @param name - The new name.
+ * @param phone - The new phone number.
+ * @returns Promise<void>
+ */
+export const updateCustomer = async (
+  customerId: string,
+  name: string,
+  phone: string
+): Promise<void> => {
+  const trimmedName = name.trim();
+  const trimmedPhone = phone.trim();
+
+  if (!trimmedName) throw new Error('Customer name is required');
+  if (!trimmedPhone) throw new Error('Customer phone is required');
+
+  const customerRef = doc(db, 'customers', customerId);
+  await updateDoc(customerRef, {
+    name: trimmedName,
+    phone: trimmedPhone,
+  });
+};
+
+/**
+ * Archives a customer.
+ *
+ * @param customerId - The ID of the customer.
+ * @returns Promise<void>
+ */
+export const archiveCustomer = async (
+  customerId: string
+): Promise<void> => {
+  const customerRef = doc(db, 'customers', customerId);
+  await updateDoc(customerRef, {
+    isArchived: true,
+    archivedAt: Date.now(),
+  });
+};
+
+/**
+ * Subscribes to realtime updates for a single customer.
+ *
+ * @param customerId - The ID of the customer.
+ * @param onData - Callback triggered when data changes.
+ * @param onError - Callback triggered on error.
+ * @returns Unsubscribe function.
+ */
+export const subscribeToCustomer = (
+  customerId: string,
+  onData: (customer: Customer | null) => void,
+  onError: (error: Error) => void
+): (() => void) => {
+  const customerRef = doc(db, 'customers', customerId);
+
+  return onSnapshot(
+    customerRef,
+    (doc) => {
+      if (doc.exists()) {
+        onData({
+          ...doc.data(),
+          customerId: doc.id,
+        } as Customer);
+      } else {
+        onData(null);
+      }
+    },
+    (error) => {
+      console.error('Error fetching customer:', error);
+      onError(error);
+    }
+  );
 };

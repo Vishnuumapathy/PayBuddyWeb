@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSales } from '../hooks/useSales';
 import {
   PageHeader,
@@ -12,6 +13,7 @@ import { PAYMENT_TYPE } from '../models/paybuddy';
 import type { Sale } from '../models/paybuddy';
 
 const SalesPage: React.FC = () => {
+  const navigate = useNavigate();
   const { sales, loading, error } = useSales();
 
   if (loading) return <LoadingState />;
@@ -20,7 +22,12 @@ const SalesPage: React.FC = () => {
     {
       header: 'Customer',
       accessor: (sale: Sale) => (
-        <div className="font-medium text-gray-900">{sale.customerName}</div>
+        <button
+          onClick={() => navigate(`/customers/${sale.customerId}`)}
+          className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors text-left"
+        >
+          {sale.customerName}
+        </button>
       ),
     },
     {
@@ -79,6 +86,20 @@ const SalesPage: React.FC = () => {
       accessor: (sale: Sale) => formatDate(sale.createdAt),
       className: 'text-right',
     },
+    {
+      header: 'Action',
+      accessor: (sale: Sale) => (
+        sale.status === 'PENDING' ? (
+          <button
+            onClick={() => navigate(`/payments/record?saleId=${sale.saleId}`)}
+            className="text-xs font-bold text-white bg-indigo-600 px-3 py-1.5 rounded hover:bg-indigo-700 transition-colors"
+          >
+            Pay
+          </button>
+        ) : null
+      ),
+      className: 'text-center',
+    },
   ];
 
   return (
@@ -88,6 +109,15 @@ const SalesPage: React.FC = () => {
         subtitle="Track your inventory sales and payment plans"
         showBack
         backPath="/dashboard"
+        action={{
+          label: 'New Sale',
+          onClick: () => navigate('/sales/create'),
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+            </svg>
+          ),
+        }}
       />
 
       {error ? (

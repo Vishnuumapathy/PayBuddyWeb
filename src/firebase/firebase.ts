@@ -11,6 +11,13 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
+// Runtime validation: Prevent white-screen by throwing clear initialization errors
+Object.entries(firebaseConfig).forEach(([key, value]) => {
+  if (!value) {
+    throw new Error(`Firebase Configuration Error: ${key} is undefined. Ensure your .env file is loaded and contains all required VITE_FIREBASE_* variables.`);
+  }
+});
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 

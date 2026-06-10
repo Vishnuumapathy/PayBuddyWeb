@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { usePayments } from '../hooks/usePayments';
 import {
   PageHeader,
@@ -11,6 +12,7 @@ import { formatCurrency, formatDateTime } from '../utils/formatters';
 import type { Payment } from '../models/paybuddy';
 
 const PaymentsPage: React.FC = () => {
+  const navigate = useNavigate();
   const { payments, loading, error } = usePayments();
 
   if (loading) return <LoadingState />;
@@ -38,9 +40,12 @@ const PaymentsPage: React.FC = () => {
     {
       header: 'Customer ID',
       accessor: (payment: Payment) => (
-        <span className="font-mono text-xs text-gray-500">
+        <button
+          onClick={() => navigate(`/customers/${payment.customerId}`)}
+          className="font-mono text-xs text-indigo-600 hover:text-indigo-800 transition-colors"
+        >
           {payment.customerId}
-        </span>
+        </button>
       ),
     },
     {
