@@ -9,7 +9,7 @@ import {
   MetricCard
 } from '../components';
 import { formatCurrency, formatDateTime } from '../utils/formatters';
-import type { Payment } from '../models/paybuddy';
+
 
 const PaymentModeBadge: React.FC<{ mode: string }> = ({ mode }) => {
   const normalizedMode = mode.toLowerCase();

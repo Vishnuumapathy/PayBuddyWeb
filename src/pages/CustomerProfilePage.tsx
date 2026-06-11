@@ -3,16 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useCustomerProfile } from '../hooks/useCustomerProfile';
 import { updateCustomer, archiveCustomer } from '../repositories/customerRepository';
 import {
-  PageHeader,
-  MetricCard,
-  DataTable,
   LoadingState,
-  EmptyState,
   StatusBadge,
   Card
 } from '../components';
 import { formatCurrency, formatDate } from '../utils/formatters';
-import type { Sale, Payment } from '../models/paybuddy';
+
 
 const CustomerProfilePage: React.FC = () => {
   const { customerId } = useParams<{ customerId: string }>();
@@ -297,7 +293,7 @@ const CustomerProfilePage: React.FC = () => {
                         <div>
                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Remaining</p>
                           <p className={`font-black ${sale.status === 'PENDING' ? 'text-rose-500' : 'text-emerald-500'}`}>
-                            {formatCurrency(sale.totalAmount - (sale.paidAmount || 0))}
+                            {formatCurrency(sale.totalAmount - (sale.amountPaid || 0))}
                           </p>
                         </div>
                         <div className="hidden sm:block">
