@@ -1,0 +1,18 @@
+{
+  "name": "paybuddy-testing-suite",
+  "version": "1.0.0",
+  "description": "Comprehensive E2E testing suite for PayBuddy Web",
+  "main": "index.js",
+  "scripts": {
+    "test:web": "mocha selenium/**/*.test.js --timeout 60000",
+    "generate-report": "node reports/reporter.js"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.20.0",
+    "mocha": "^10.4.0",
+    "chai": "^4.4.1",
+    "exceljs": "^4.4.0",
+    "dotenv": "^16.4.5",
+    "axios": "^1.6.8"
+  }
+}
