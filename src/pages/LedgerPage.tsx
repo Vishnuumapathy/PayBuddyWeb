@@ -5,7 +5,8 @@ import {
   DataTable,
   EmptyState,
   LoadingState,
-  StatusBadge
+  StatusBadge,
+  Card
 } from '../components';
 import { formatCurrency, formatDateTime } from '../utils/formatters';
 import type { LedgerEntry } from '../models/paybuddy';
@@ -18,17 +19,31 @@ const LedgerPage: React.FC = () => {
   const columns = [
     {
       header: 'Date & Time',
-      accessor: (entry: LedgerEntry) => formatDateTime(entry.createdAt),
+      accessor: (entry: LedgerEntry) => (
+        <div className="flex flex-col">
+          <span className="font-bold text-gray-900">{formatDateTime(entry.createdAt).split(',')[0]}</span>
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">
+            {formatDateTime(entry.createdAt).split(',')[1]}
+          </span>
+        </div>
+      ),
     },
     {
       header: 'Customer',
       accessor: (entry: LedgerEntry) => (
-        <div className="font-medium text-gray-900">{entry.customerName}</div>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-xs text-gray-500 font-bold border border-gray-100">
+            {entry.customerName.charAt(0).toUpperCase()}
+          </div>
+          <span className="font-bold text-gray-900">{entry.customerName}</span>
+        </div>
       ),
     },
     {
-      header: 'Item',
-      accessor: 'itemName' as keyof LedgerEntry,
+      header: 'Details',
+      accessor: (entry: LedgerEntry) => (
+        <span className="font-medium text-gray-600">{entry.itemName || 'Account Payment'}</span>
+      ),
     },
     {
       header: 'Type',
@@ -37,7 +52,7 @@ const LedgerPage: React.FC = () => {
     {
       header: 'Amount',
       accessor: (entry: LedgerEntry) => (
-        <span className={`font-bold ${entry.type === 'sale' ? 'text-red-600' : 'text-green-600'}`}>
+        <span className={`font-black ${entry.type === 'sale' ? 'text-rose-500' : 'text-emerald-500'}`}>
           {entry.type === 'sale' ? '-' : '+'}{formatCurrency(entry.amount)}
         </span>
       ),
@@ -46,24 +61,25 @@ const LedgerPage: React.FC = () => {
     {
       header: 'Balance After',
       accessor: (entry: LedgerEntry) => (
-        <span className="font-bold text-gray-900">
+        <span className="font-black text-gray-900 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100">
           {formatCurrency(entry.balanceAfter)}
         </span>
       ),
       className: 'text-right',
     },
     {
-      header: 'Sale ID',
+      header: 'Reference',
       accessor: (entry: LedgerEntry) => (
-        <span className="font-mono text-xs text-gray-500">
-          {entry.saleId || '-'}
+        <span className="font-mono text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
+          {entry.saleId ? `SALE: ${entry.saleId.slice(-6)}` : '-'}
         </span>
       ),
+      className: 'text-right',
     },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
       <PageHeader
         title="Business Ledger"
         subtitle="Chronological log of all transactions and balance changes"
@@ -72,9 +88,9 @@ const LedgerPage: React.FC = () => {
       />
 
       {error ? (
-        <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded shadow-sm">
-          <p className="text-sm text-red-700">Error loading ledger: {error.message}</p>
-        </div>
+        <Card className="bg-rose-50 border-rose-100 p-4">
+          <p className="text-sm text-rose-700 font-bold">Error loading ledger: {error.message}</p>
+        </Card>
       ) : (
         <DataTable
           columns={columns}
@@ -84,6 +100,11 @@ const LedgerPage: React.FC = () => {
             <EmptyState
               title="Ledger is empty"
               message="No transactions have been recorded yet."
+              icon={
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              }
             />
           }
         />

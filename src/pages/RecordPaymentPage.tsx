@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { subscribeToSale } from '../repositories/salesRepository';
 import { recordPayment } from '../repositories/paymentRepository';
-import { PageHeader, LoadingState } from '../components';
+import { PageHeader, LoadingState, Card } from '../components';
 import { formatCurrency } from '../utils/formatters';
 import { PAYMENT_TYPE, SALE_STATUS } from '../models/paybuddy';
 import type { Sale } from '../models/paybuddy';
@@ -110,7 +110,7 @@ const RecordPaymentPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-3xl mx-auto px-6 py-8">
       <PageHeader
         title="Record Payment"
         subtitle={`Recording payment for ${sale?.customerName}`}
@@ -119,49 +119,49 @@ const RecordPaymentPage: React.FC = () => {
       />
 
       {success && (
-          <div className="mb-6 bg-green-50 border-l-4 border-green-400 p-4 rounded text-sm text-green-700">
+          <div className="mb-6 bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-lg text-sm text-emerald-700 font-medium">
               Payment recorded successfully! Redirecting...
           </div>
       )}
 
-      <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
-        <div className="grid grid-cols-2 gap-4 mb-8 bg-gray-50 p-4 rounded-lg text-sm">
+      <Card hoverable={false} className="p-8">
+        <div className="grid grid-cols-2 gap-6 mb-8 bg-gray-50/50 p-6 rounded-2xl border border-gray-100 text-sm">
             <div>
-                <p className="text-gray-500">Customer</p>
-                <p className="font-bold">{sale?.customerName}</p>
+                <p className="text-gray-500 font-medium mb-1">Customer</p>
+                <p className="font-bold text-gray-900 text-base">{sale?.customerName}</p>
             </div>
             <div>
-                <p className="text-gray-500">Item</p>
-                <p className="font-bold">{sale?.itemName}</p>
+                <p className="text-gray-500 font-medium mb-1">Item</p>
+                <p className="font-bold text-gray-900 text-base">{sale?.itemName}</p>
             </div>
             <div>
-                <p className="text-gray-500">Total Amount</p>
-                <p className="font-bold">{formatCurrency(financialDetails?.totalAmount || 0)}</p>
+                <p className="text-gray-500 font-medium mb-1">Total Amount</p>
+                <p className="font-bold text-gray-900">{formatCurrency(financialDetails?.totalAmount || 0)}</p>
             </div>
             <div>
-                <p className="text-gray-500">Amount Paid</p>
-                <p className="font-bold text-green-600">{formatCurrency(financialDetails?.amountPaid || 0)}</p>
+                <p className="text-gray-500 font-medium mb-1">Amount Paid</p>
+                <p className="font-bold text-emerald-600">{formatCurrency(financialDetails?.amountPaid || 0)}</p>
             </div>
-            <div className="col-span-2 pt-2 border-t border-gray-200 mt-2">
-                <p className="text-gray-500">Remaining Balance</p>
-                <p className="text-xl font-black text-red-600">{formatCurrency(financialDetails?.remainingBalance || 0)}</p>
+            <div className="col-span-2 pt-4 border-t border-gray-200 mt-2">
+                <p className="text-gray-500 font-bold uppercase tracking-wider text-xs mb-1">Remaining Balance</p>
+                <p className="text-3xl font-black text-rose-600">{formatCurrency(financialDetails?.remainingBalance || 0)}</p>
             </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded text-sm text-red-700">
+            <div className="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-lg text-sm text-rose-700">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="amount" className="block text-sm font-bold text-gray-900 mb-2">
               Payment Amount *
             </label>
             <div className="relative rounded-lg shadow-sm">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-500 sm:text-sm">₹</span>
+                <span className="text-gray-400 font-medium sm:text-sm">₹</span>
               </div>
               <input
                 type="number"
@@ -170,7 +170,7 @@ const RecordPaymentPage: React.FC = () => {
                 step="0.01"
                 value={amount || ''}
                 onChange={(e) => setAmount(Number(e.target.value))}
-                className="block w-full pl-7 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full pl-8 rounded-lg border-gray-200 bg-gray-50/50 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 transition-colors"
                 placeholder="0.00"
                 required
               />
@@ -178,14 +178,14 @@ const RecordPaymentPage: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="paymentMode" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="paymentMode" className="block text-sm font-bold text-gray-900 mb-2">
               Payment Mode *
             </label>
             <select
               id="paymentMode"
               value={paymentMode}
               onChange={(e) => setPaymentMode(e.target.value)}
-              className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="block w-full rounded-lg border-gray-200 bg-gray-50/50 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 transition-colors"
             >
               <option value="Cash">Cash</option>
               <option value="UPI">UPI</option>
@@ -193,18 +193,18 @@ const RecordPaymentPage: React.FC = () => {
             </select>
           </div>
 
-          <div className="pt-4 flex items-center justify-end space-x-3">
+          <div className="pt-6 flex items-center justify-end space-x-4">
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="px-6 py-2.5 border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting || success || (sale?.status === SALE_STATUS.COMPLETED)}
-              className={`px-6 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+              className={`px-8 py-2.5 border border-transparent rounded-lg shadow-lg shadow-indigo-200 text-sm font-black text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all ${
                 (isSubmitting || success || sale?.status === SALE_STATUS.COMPLETED) ? 'opacity-75 cursor-not-allowed' : ''
               }`}
             >
@@ -212,7 +212,7 @@ const RecordPaymentPage: React.FC = () => {
             </button>
           </div>
         </form>
-      </div>
+      </Card>
     </div>
   );
 };

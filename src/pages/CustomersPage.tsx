@@ -7,7 +7,8 @@ import {
   PageHeader,
   DataTable,
   EmptyState,
-  LoadingState
+  LoadingState,
+  Card
 } from '../components';
 import { formatCurrency, formatDate } from '../utils/formatters';
 import type { Customer } from '../models/paybuddy';
@@ -75,25 +76,32 @@ const CustomersPage: React.FC = () => {
       accessor: (customer: Customer) => (
         <button
           onClick={() => navigate(`/customers/${customer.customerId}`)}
-          className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors text-left"
+          className="font-bold text-indigo-600 hover:text-indigo-800 transition-colors text-left group flex items-center gap-2"
         >
+          <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-xs text-indigo-600 group-hover:bg-indigo-100 transition-colors">
+            {customer.name.charAt(0).toUpperCase()}
+          </div>
           {customer.name}
         </button>
       ),
     },
     {
       header: 'Phone',
-      accessor: 'phone' as keyof Customer,
+      accessor: (customer: Customer) => (
+        <span className="font-mono text-gray-500 font-medium">{customer.phone}</span>
+      ),
     },
     {
       header: 'Total Amount',
-      accessor: (customer: Customer) => formatCurrency(customer.totalAmount || 0),
+      accessor: (customer: Customer) => (
+        <span className="font-bold text-gray-900">{formatCurrency(customer.totalAmount || 0)}</span>
+      ),
       className: 'text-right',
     },
     {
       header: 'Paid Amount',
       accessor: (customer: Customer) => (
-        <span className="text-green-600 font-medium">
+        <span className="text-emerald-600 font-bold">
           {formatCurrency(customer.paidAmount || 0)}
         </span>
       ),
@@ -104,7 +112,7 @@ const CustomersPage: React.FC = () => {
       accessor: (customer: Customer) => {
         const balance = (customer.totalAmount || 0) - (customer.paidAmount || 0);
         return (
-          <span className={`font-bold ${balance > 0 ? 'text-red-600' : 'text-gray-900'}`}>
+          <span className={`font-black ${balance > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
             {formatCurrency(balance)}
           </span>
         );
@@ -113,16 +121,18 @@ const CustomersPage: React.FC = () => {
     },
     {
       header: 'Joined',
-      accessor: (customer: Customer) => formatDate(customer.createdAt),
+      accessor: (customer: Customer) => (
+        <span className="text-gray-400 font-medium">{formatDate(customer.createdAt)}</span>
+      ),
       className: 'text-right',
     },
     {
       header: 'Actions',
       accessor: (customer: Customer) => (
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-3">
           <button
             onClick={() => navigate(`/customers/${customer.customerId}`)}
-            className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
+            className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all active:scale-95 hover:scale-110"
             title="View Profile"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -132,7 +142,7 @@ const CustomersPage: React.FC = () => {
           </button>
           <button
             onClick={() => setCustomerToArchive(customer)}
-            className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
+            className="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition-all active:scale-95 hover:scale-110"
             title="Archive Customer"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,7 +156,7 @@ const CustomersPage: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
       <PageHeader
         title="Customers"
         subtitle="Manage your customer base and their balances"
@@ -155,28 +165,28 @@ const CustomersPage: React.FC = () => {
       />
 
       {/* Add Customer Form */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Add New Customer</h2>
-        <form onSubmit={handleAddCustomer} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Customer Name</label>
+      <Card className="p-8">
+        <h2 className="text-xl font-bold text-gray-900 mb-6 tracking-tight">Add New Customer</h2>
+        <form onSubmit={handleAddCustomer} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Customer Name</label>
             <input
               type="text"
               placeholder="e.g. Rahul Sharma"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:bg-white focus:border-indigo-400 transition-all outline-none font-medium"
               disabled={isSubmitting}
             />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Phone Number</label>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</label>
             <input
               type="tel"
               placeholder="e.g. 9876543210"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:bg-white focus:border-indigo-400 transition-all outline-none font-medium"
               disabled={isSubmitting}
             />
           </div>
@@ -184,10 +194,10 @@ const CustomersPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full px-6 py-2 rounded-lg font-bold text-white transition-all shadow-sm ${
+              className={`w-full px-6 py-3 rounded-2xl font-bold text-white transition-all shadow-sm active:scale-[0.98] ${
                 isSubmitting
                   ? 'bg-indigo-300 cursor-not-allowed'
-                  : 'bg-indigo-600 hover:bg-indigo-700 active:scale-95'
+                  : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-100'
               }`}
             >
               {isSubmitting ? 'Adding...' : 'Add Customer'}
@@ -195,14 +205,21 @@ const CustomersPage: React.FC = () => {
           </div>
         </form>
         {submitError && (
-          <p className="mt-2 text-red-500 text-sm font-medium">{submitError}</p>
+          <div className="mt-4 p-3 bg-rose-50 rounded-xl border border-rose-100">
+            <p className="text-rose-600 text-sm font-bold flex items-center gap-2">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              {submitError}
+            </p>
+          </div>
         )}
-      </div>
+      </Card>
 
       {fetchError ? (
-        <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded shadow-sm">
-          <p className="text-sm text-red-700">Error loading customers: {fetchError.message}</p>
-        </div>
+        <Card className="bg-rose-50 border-rose-100 p-4">
+          <p className="text-sm text-rose-700 font-bold">Error loading customers: {fetchError.message}</p>
+        </Card>
       ) : (
         <DataTable
           columns={columns}
@@ -212,6 +229,11 @@ const CustomersPage: React.FC = () => {
             <EmptyState
               title="No customers yet"
               message="Get started by adding your first customer using the form above."
+              icon={
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              }
             />
           }
         />
@@ -219,33 +241,33 @@ const CustomersPage: React.FC = () => {
 
       {/* Archive Confirmation Dialog */}
       {customerToArchive && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4 transition-all animate-in fade-in">
+          <Card className="max-w-md w-full p-8 text-center animate-in zoom-in duration-200">
+            <div className="w-20 h-20 bg-rose-50 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform hover:rotate-6">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Archive {customerToArchive.name}?</h3>
-            <p className="text-gray-500 mb-6">
-              Financial history, sales, payments and ledger records will remain preserved.
+            <h3 className="text-2xl font-black text-gray-900 mb-3 tracking-tight">Archive {customerToArchive.name}?</h3>
+            <p className="text-gray-500 mb-8 font-medium leading-relaxed">
+              Financial history, sales, payments and ledger records will remain preserved in the archives.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={() => setCustomerToArchive(null)}
-                className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium transition-colors"
+                className="flex-1 px-6 py-3 bg-white border-2 border-gray-100 text-gray-700 rounded-2xl hover:bg-gray-50 font-bold transition-all active:scale-95"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmArchive}
                 disabled={isArchiving}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition-colors disabled:opacity-50"
+                className="flex-1 px-6 py-3 bg-rose-500 text-white rounded-2xl hover:bg-rose-600 font-black transition-all shadow-lg shadow-rose-100 active:scale-95 disabled:opacity-50"
               >
                 {isArchiving ? 'Archiving...' : 'Archive'}
               </button>
             </div>
-          </div>
+          </Card>
         </div>
       )}
     </div>

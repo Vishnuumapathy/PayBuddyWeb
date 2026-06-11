@@ -8,7 +8,8 @@ import {
   DataTable,
   LoadingState,
   EmptyState,
-  StatusBadge
+  StatusBadge,
+  Card
 } from '../components';
 import { formatCurrency, formatDate } from '../utils/formatters';
 import type { Sale, Payment } from '../models/paybuddy';
@@ -32,21 +33,32 @@ const CustomerProfilePage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded shadow-sm">
-          <p className="text-sm text-red-700">Error loading customer profile: {error.message}</p>
-        </div>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <Card className="bg-rose-50 border-rose-100 p-4">
+          <p className="text-sm text-rose-700 font-bold flex items-center gap-2">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            {error.message}
+          </p>
+        </Card>
       </div>
     );
   }
 
   if (!customer) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8 text-center">
-        <h2 className="text-2xl font-bold text-gray-900">Customer not found</h2>
+      <div className="max-w-7xl mx-auto px-6 py-16 text-center">
+        <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-black text-gray-900 mb-2">Customer not found</h2>
+        <p className="text-gray-500 mb-8">The customer record you're looking for doesn't exist.</p>
         <button
           onClick={() => navigate('/customers')}
-          className="mt-4 text-indigo-600 hover:text-indigo-800 font-medium"
+          className="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95"
         >
           Back to Customers
         </button>
@@ -94,271 +106,374 @@ const CustomerProfilePage: React.FC = () => {
   const outstandingBalance = (customer.totalAmount || 0) - (customer.paidAmount || 0);
   const firstPendingSale = sales.find(s => s.status === 'PENDING');
 
-  const saleColumns = [
-    {
-      header: 'Sale ID',
-      accessor: (sale: Sale) => <span className="text-xs text-gray-400 font-mono">{sale.saleId.slice(-6).toUpperCase()}</span>,
-    },
-    {
-      header: 'Item',
-      accessor: 'itemName' as keyof Sale,
-    },
-    {
-      header: 'Amount',
-      accessor: (sale: Sale) => formatCurrency(sale.totalAmount),
-      className: 'text-right',
-    },
-    {
-      header: 'Status',
-      accessor: (sale: Sale) => <StatusBadge status={sale.status} />,
-      className: 'text-center',
-    },
-    {
-      header: 'Action',
-      accessor: (sale: Sale) => (
-        sale.status === 'PENDING' ? (
-          <button
-            onClick={() => navigate(`/payments/record?saleId=${sale.saleId}`)}
-            className="text-xs font-bold text-white bg-indigo-600 px-3 py-1.5 rounded hover:bg-indigo-700 transition-colors"
-          >
-            Pay
-          </button>
-        ) : null
-      ),
-      className: 'text-center',
-    },
-    {
-      header: 'Created Date',
-      accessor: (sale: Sale) => formatDate(sale.createdAt),
-      className: 'text-right',
-    },
-  ];
-
-  const paymentColumns = [
-    {
-      header: 'Payment ID',
-      accessor: (payment: Payment) => <span className="text-xs text-gray-400 font-mono">{payment.paymentId.slice(-6).toUpperCase()}</span>,
-    },
-    {
-      header: 'Amount',
-      accessor: (payment: Payment) => formatCurrency(payment.amount),
-      className: 'text-right',
-    },
-    {
-      header: 'Mode',
-      accessor: 'paymentMode' as keyof Payment,
-    },
-    {
-      header: 'Date',
-      accessor: (payment: Payment) => formatDate(payment.createdAt),
-      className: 'text-right',
-    },
-  ];
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <PageHeader
-        title={
-          <div className="flex items-center gap-3">
-            {customer.name}
-            {customer.isArchived && <StatusBadge status="ARCHIVED" />}
+    <div className="max-w-7xl mx-auto px-6 py-8 space-y-10 bg-slate-50/50 min-h-screen">
+      {/* SECTION 1 & 3 — HERO HEADER & QUICK ACTIONS */}
+      <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-xl shadow-indigo-50/50 p-6 lg:p-10">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+            <div className="w-24 h-24 rounded-3xl bg-indigo-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl shadow-indigo-200 shrink-0 transform -rotate-3">
+              {customer.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                <h1 className="text-4xl font-black text-gray-900 tracking-tight">{customer.name}</h1>
+                {customer.isArchived && (
+                  <span className="px-3 py-1 bg-gray-100 text-gray-500 text-[10px] font-black uppercase tracking-widest rounded-full border border-gray-200">
+                    Archived
+                  </span>
+                )}
+              </div>
+              <div className="mt-3 flex flex-wrap justify-center md:justify-start gap-y-2 gap-x-5 text-sm font-bold text-gray-400 uppercase tracking-widest">
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 014 0" />
+                  </svg>
+                  ID: {customer.customerId.slice(-8).toUpperCase()}
+                </span>
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  {customer.phone}
+                </span>
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Since {formatDate(customer.createdAt)}
+                </span>
+              </div>
+            </div>
           </div>
-        }
-        subtitle={`Customer ID: ${customer.customerId} | Phone: ${customer.phone} | Created: ${formatDate(customer.createdAt)}`}
-        showBack
-        backPath="/customers"
-      />
 
-      {/* Financial Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <MetricCard
-          title="Total Amount"
-          value={formatCurrency(customer.totalAmount || 0)}
-          icon={
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          }
-        />
-        <MetricCard
-          title="Paid Amount"
-          value={formatCurrency(customer.paidAmount || 0)}
-          className="text-green-600"
-          icon={
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          }
-        />
-        <MetricCard
-          title="Outstanding Balance"
-          value={formatCurrency(outstandingBalance)}
-          className={outstandingBalance > 0 ? 'text-red-600' : 'text-gray-900'}
-          icon={
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          }
-        />
-      </div>
-
-      {/* Sales History */}
-      <div className="mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Sales History</h2>
-        <DataTable
-          columns={saleColumns}
-          data={sales}
-          keyExtractor={(s) => s.saleId}
-          emptyState={
-            <EmptyState
-              title="No sales found"
-              message="This customer has no recorded sales."
-            />
-          }
-        />
-      </div>
-
-      {/* Payment History */}
-      <div className="mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Payment History</h2>
-        <DataTable
-          columns={paymentColumns}
-          data={payments}
-          keyExtractor={(p) => p.paymentId}
-          emptyState={
-            <EmptyState
-              title="No payments found"
-              message="This customer has no recorded payments."
-            />
-          }
-        />
-      </div>
-
-      {/* Actions */}
-      <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-bold text-gray-900">Actions</h3>
-            <p className="text-sm text-gray-500">Quick actions for this customer</p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => navigate(`/sales/create?customerId=${customer.customerId}`)}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
-            >
-              Create Sale
-            </button>
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-3">
             <button
               onClick={() => {
-                if (firstPendingSale) {
-                  navigate(`/payments/record?saleId=${firstPendingSale.saleId}`);
-                }
+                if (firstPendingSale) navigate(`/payments/record?saleId=${firstPendingSale.saleId}`);
               }}
               disabled={!firstPendingSale}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                firstPendingSale
-                  ? 'bg-green-600 text-white hover:bg-green-700'
-                  : 'bg-gray-300 text-white cursor-not-allowed'
-              }`}
+              className="flex items-center justify-center gap-2 px-5 py-3.5 bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 active:scale-95 disabled:opacity-50 disabled:grayscale"
             >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               Record Payment
             </button>
             <button
-              onClick={handleOpenEdit}
-              className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              onClick={() => navigate(`/sales/create?customerId=${customer.customerId}`)}
+              className="flex items-center justify-center gap-2 px-5 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 active:scale-95"
             >
-              Edit Customer
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Create Sale
+            </button>
+            <button
+              onClick={handleOpenEdit}
+              className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white border-2 border-gray-100 text-gray-600 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-gray-50 hover:border-gray-200 transition-all active:scale-95"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Edit
             </button>
             {!customer.isArchived && (
               <button
                 onClick={() => setIsArchiveDialogOpen(true)}
-                className="px-4 py-2 bg-red-50 text-red-600 border border-red-100 rounded-lg hover:bg-red-100 transition-colors font-medium"
+                className="flex items-center justify-center gap-2 px-5 py-3.5 bg-rose-50 text-rose-600 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-rose-100 transition-all active:scale-95"
               >
-                Archive Customer
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Archive
               </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Edit Modal */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Edit Customer</h3>
-            <form onSubmit={handleUpdate}>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    required
-                    value={editPhone}
-                    onChange={(e) => setEditPhone(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                  />
-                </div>
+      {/* SECTION 2 — FINANCIAL OVERVIEW */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          {
+            label: 'Total Amount',
+            value: customer.totalAmount || 0,
+            color: 'text-indigo-600',
+            bg: 'bg-indigo-50/50',
+            icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+            accent: 'border-indigo-500'
+          },
+          {
+            label: 'Paid Amount',
+            value: customer.paidAmount || 0,
+            color: 'text-emerald-600',
+            bg: 'bg-emerald-50/50',
+            icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+            accent: 'border-emerald-500'
+          },
+          {
+            label: 'Outstanding Balance',
+            value: outstandingBalance,
+            color: outstandingBalance > 0 ? 'text-rose-600' : 'text-emerald-600',
+            bg: outstandingBalance > 0 ? 'bg-rose-50/50' : 'bg-emerald-50/50',
+            icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+            accent: outstandingBalance > 0 ? 'border-rose-500' : 'border-emerald-500',
+            emphasize: true
+          }
+        ].map((item, idx) => (
+          <div
+            key={idx}
+            className={`
+              relative overflow-hidden bg-white p-8 rounded-[2rem] border-2 border-gray-100 shadow-sm
+              ${item.emphasize ? 'md:scale-105 md:shadow-xl md:z-10' : ''}
+              transition-all hover:border-transparent hover:shadow-2xl group
+            `}
+          >
+            <div className={`absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8 rounded-full ${item.bg} opacity-20 group-hover:scale-150 transition-transform duration-700`} />
+            <div className="relative">
+              <div className={`w-12 h-12 rounded-2xl ${item.bg} ${item.color} flex items-center justify-center mb-4`}>
+                {item.icon}
               </div>
-              <div className="mt-6 flex justify-end gap-3">
+              <p className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-1">{item.label}</p>
+              <p className={`text-4xl font-black ${item.color} tracking-tighter`}>
+                {formatCurrency(item.value)}
+              </p>
+            </div>
+            <div className={`absolute bottom-0 left-8 right-8 h-1.5 rounded-t-full ${item.accent} opacity-20`} />
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+        {/* SECTION 4 — SALES HISTORY */}
+        <div className="lg:col-span-3 space-y-6">
+          <div className="flex items-end justify-between px-2">
+            <div>
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight">Sales History</h2>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Timeline of all purchases</p>
+            </div>
+            <span className="px-3 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-black rounded-full uppercase tracking-tighter">
+              {sales.length} Items
+            </span>
+          </div>
+
+          <div className="space-y-4">
+            {sales.length > 0 ? (
+              sales.map((sale, idx) => (
+                <div key={sale.saleId} className="group relative flex gap-6">
+                  <div className="flex flex-col items-center">
+                    <div className={`
+                      w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 z-10
+                      ${sale.status === 'COMPLETED' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}
+                      shadow-sm group-hover:scale-110 transition-transform duration-300
+                    `}>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                      </svg>
+                    </div>
+                    {idx !== sales.length - 1 && (
+                      <div className="w-0.5 h-full bg-gray-100 my-1 group-hover:bg-indigo-100 transition-colors" />
+                    )}
+                  </div>
+                  <div className="flex-1 pb-8">
+                    <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all">
+                      <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
+                        <div>
+                          <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">
+                            REF: {sale.saleId.slice(-6).toUpperCase()}
+                          </p>
+                          <h3 className="text-lg font-black text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors">
+                            {sale.itemName}
+                          </h3>
+                        </div>
+                        <StatusBadge status={sale.status} />
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-4 border-t border-gray-50">
+                        <div>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total</p>
+                          <p className="font-black text-gray-900">{formatCurrency(sale.totalAmount)}</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Remaining</p>
+                          <p className={`font-black ${sale.status === 'PENDING' ? 'text-rose-500' : 'text-emerald-500'}`}>
+                            {formatCurrency(sale.totalAmount - (sale.paidAmount || 0))}
+                          </p>
+                        </div>
+                        <div className="hidden sm:block">
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Date</p>
+                          <p className="font-bold text-gray-600">{formatDate(sale.createdAt)}</p>
+                        </div>
+                      </div>
+                      {sale.status === 'PENDING' && (
+                        <button
+                          onClick={() => navigate(`/payments/record?saleId=${sale.saleId}`)}
+                          className="mt-6 w-full py-3 bg-gray-50 text-indigo-600 text-xs font-black rounded-xl hover:bg-indigo-600 hover:text-white transition-all uppercase tracking-widest"
+                        >
+                          Collect Payment
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="bg-white rounded-[2.5rem] border border-gray-100 p-12 text-center shadow-sm">
+                <div className="w-20 h-20 bg-indigo-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-10 h-10 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-black text-gray-900 mb-2 tracking-tight">No Sales Yet</h3>
+                <p className="text-gray-400 text-sm font-medium mb-8">This customer hasn't made any purchases yet.</p>
+                <button
+                  onClick={() => navigate(`/sales/create?customerId=${customer.customerId}`)}
+                  className="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold text-sm shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all"
+                >
+                  Create First Sale
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* SECTION 5 — PAYMENT HISTORY */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="flex items-end justify-between px-2">
+            <div>
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight">Payments</h2>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Recent transactions</p>
+            </div>
+            <div className="w-10 h-10 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+            {payments.length > 0 ? (
+              <div className="divide-y divide-gray-50">
+                {payments.map((payment) => (
+                  <div key={payment.paymentId} className="p-6 hover:bg-gray-50/50 transition-colors group">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-lg font-black text-gray-900 leading-tight">
+                            {formatCurrency(payment.amount)}
+                          </p>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+                            {payment.paymentMode} • {formatDate(payment.createdAt)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="inline-flex items-center px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-black rounded-lg uppercase tracking-widest border border-emerald-100">
+                          Success
+                        </span>
+                        <p className="text-[10px] font-mono font-bold text-gray-300 mt-2">
+                          #{payment.paymentId.slice(-6).toUpperCase()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-12 text-center">
+                <div className="w-16 h-16 bg-emerald-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-8 h-8 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-black text-gray-900 mb-1 tracking-tight">No Transactions</h3>
+                <p className="text-gray-400 text-xs font-medium">Payment history will appear here.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* MODALS RENDERED HERE (Edit and Archive remain same logic but styled) */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4 animate-in fade-in">
+          <Card className="max-w-md w-full p-8 animate-in zoom-in duration-200 rounded-[2.5rem] shadow-2xl">
+            <h3 className="text-2xl font-black text-gray-900 mb-6 tracking-tight">Edit Profile</h3>
+            <form onSubmit={handleUpdate} className="space-y-6">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:bg-white focus:border-indigo-400 transition-all outline-none font-bold text-gray-900"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Phone Number</label>
+                <input
+                  type="tel"
+                  required
+                  value={editPhone}
+                  onChange={(e) => setEditPhone(e.target.value)}
+                  className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:bg-white focus:border-indigo-400 transition-all outline-none font-bold text-gray-900"
+                />
+              </div>
+              <div className="pt-4 flex gap-4">
                 <button
                   type="button"
                   onClick={() => setIsEditModalOpen(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+                  className="flex-1 px-6 py-4 bg-white border-2 border-gray-100 text-gray-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-gray-50 transition-all active:scale-95"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isUpdating}
-                  className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 disabled:opacity-50"
+                  className="flex-1 px-6 py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95 disabled:opacity-50"
                 >
                   {isUpdating ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </form>
-          </div>
+          </Card>
         </div>
       )}
 
-      {/* Archive Confirmation Dialog */}
       {isArchiveDialogOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4 animate-in fade-in">
+          <Card className="max-w-md w-full p-10 text-center animate-in zoom-in duration-200 rounded-[2.5rem] shadow-2xl">
+            <div className="w-24 h-24 bg-rose-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6 transform hover:rotate-6 transition-transform">
+              <svg className="h-12 w-12 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Archive customer?</h3>
-            <p className="text-gray-500 mb-6">
-              Financial history, sales, payments and ledger records will remain preserved.
+            <h3 className="text-3xl font-black text-gray-900 mb-3 tracking-tight">Archive Record?</h3>
+            <p className="text-gray-400 mb-10 font-medium leading-relaxed">
+              All financial data for <span className="text-gray-900 font-bold">{customer.name}</span> will be moved to archives. You can still access these records later.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => setIsArchiveDialogOpen(false)}
-                className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium transition-colors"
-              >
-                Cancel
-              </button>
+            <div className="flex flex-col gap-4">
               <button
                 onClick={handleArchive}
                 disabled={isArchiving}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition-colors disabled:opacity-50"
+                className="w-full px-6 py-4 bg-rose-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-rose-600 transition-all shadow-xl shadow-rose-100 active:scale-95 disabled:opacity-50"
               >
-                {isArchiving ? 'Archiving...' : 'Archive'}
+                {isArchiving ? 'Archiving...' : 'Yes, Archive Customer'}
+              </button>
+              <button
+                onClick={() => setIsArchiveDialogOpen(false)}
+                className="w-full px-6 py-4 bg-white border-2 border-gray-100 text-gray-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-gray-50 transition-all active:scale-95"
+              >
+                Cancel
               </button>
             </div>
-          </div>
+          </Card>
         </div>
       )}
     </div>
