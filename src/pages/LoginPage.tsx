@@ -18,7 +18,17 @@ const LoginPage: React.FC = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Failed to login. Please check your credentials.');
+      const errMsg = err.message || '';
+      if (
+        errMsg.includes('auth/invalid-credential') ||
+        errMsg.includes('auth/invalid-email') ||
+        errMsg.includes('auth/user-not-found') ||
+        errMsg.includes('auth/wrong-password')
+      ) {
+        setError('Failed to login: invalid email or password.');
+      } else {
+        setError(errMsg || 'Failed to login. Please check your credentials.');
+      }
     } finally {
       setIsLoggingIn(false);
     }
