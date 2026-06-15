@@ -25,11 +25,11 @@ function DataTable<T>({
 }: DataTableProps<T>) {
   if (isLoading) {
     return (
-      <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="w-full bg-app-card rounded-2xl shadow-sm border border-app-border overflow-hidden">
         <div className="animate-pulse">
-          <div className="h-12 bg-gray-50 border-b border-gray-100" />
+          <div className="h-12 bg-app-bg/50 border-b border-app-border" />
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-16 border-b border-gray-50 bg-white" />
+            <div key={i} className="h-16 border-b border-app-border bg-app-card" />
           ))}
         </div>
       </div>
@@ -41,36 +41,36 @@ function DataTable<T>({
   }
 
   return (
-    <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-md">
+    <div className="w-full bg-app-card rounded-2xl shadow-sm border border-app-border overflow-hidden transition-all duration-200 hover:shadow-md hover:border-brand-primary/30">
       <div className="overflow-x-auto custom-scrollbar">
         <table className="w-full text-left border-collapse table-auto">
           <thead>
-            <tr className="bg-gray-50/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-10">
+            <tr className="bg-app-bg/80 backdrop-blur-sm border-b border-app-border sticky top-0 z-10">
               {columns.map((column, index) => (
                 <th
                   key={index}
-                  className={`px-6 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-[0.1em] ${column.className || ''}`}
+                  className={`px-6 py-4 text-[11px] font-black text-app-text-secondary uppercase tracking-[0.2em] ${column.className || ''}`}
                 >
                   {column.header}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-app-border/30">
             {data.map((item, idx) => (
               <tr
                 key={keyExtractor(item)}
                 onClick={() => onRowClick?.(item)}
                 className={`
                   transition-all duration-150 group
-                  ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}
-                  ${onRowClick ? 'cursor-pointer hover:bg-indigo-50/40' : 'hover:bg-gray-50/50'}
+                  ${idx % 2 === 0 ? 'bg-app-card' : 'bg-app-bg/20'}
+                  ${onRowClick ? 'cursor-pointer hover:bg-brand-primary/5' : 'hover:bg-brand-primary/5'}
                 `}
               >
                 {columns.map((column, index) => (
                   <td
                     key={index}
-                    className={`px-6 py-4 text-sm text-gray-600 font-medium group-hover:text-gray-900 ${column.className || ''}`}
+                    className={`px-6 py-4 text-sm text-app-text-secondary font-bold group-hover:text-app-text-primary ${column.className || ''}`}
                   >
                     {typeof column.accessor === 'function'
                       ? column.accessor(item)

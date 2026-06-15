@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #38BDF8;
+  --color-brand-secondary: #1D4ED8;
+  --color-brand-success: #4ADE80;
+  --color-brand-error: #FB7185;
+  --color-brand-warning: #FBBF24;
+
+  /* Mobile App Background Palette */
+  --color-app-bg: #111827;
+  --color-app-card: #1F2937;
+  --color-app-border: #374151;
+  --color-app-text-primary: #F9FAFB;
+  --color-app-text-secondary: #9CA3AF;
+
+  --background-image-brand-gradient: linear-gradient(135deg, #38BDF8 0%, #1D4ED8 100%);
+}

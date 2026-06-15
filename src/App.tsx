@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, AuthContext } from './auth/AuthProvider';
 import { useContext } from 'react';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import OnboardingPage from './pages/OnboardingPage';
 import DashboardPage from './pages/DashboardPage';
 import CustomersPage from './pages/CustomersPage';
 import CustomerProfilePage from './pages/CustomerProfilePage';
@@ -21,8 +23,17 @@ const AppRoutes = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl font-semibold">Loading...</div>
+      <div className="flex items-center justify-center min-h-screen bg-app-bg">
+        <div className="flex flex-col items-center">
+          <div className="text-5xl font-black text-brand-primary tracking-tighter animate-pulse drop-shadow-[0_0_15px_rgba(56,189,248,0.4)]">
+            PayBuddy
+          </div>
+          <div className="mt-4 flex gap-1">
+            <div className="w-1.5 h-1.5 bg-brand-primary rounded-full animate-bounce [animation-delay:-0.3s]" />
+            <div className="w-1.5 h-1.5 bg-brand-primary rounded-full animate-bounce [animation-delay:-0.15s]" />
+            <div className="w-1.5 h-1.5 bg-brand-primary rounded-full animate-bounce" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -32,6 +43,14 @@ const AppRoutes = () => {
       <Route
         path="/login"
         element={!user ? <LoginPage /> : <Navigate to="/dashboard" replace />}
+      />
+      <Route
+        path="/register"
+        element={!user ? <RegisterPage /> : <Navigate to="/dashboard" replace />}
+      />
+      <Route
+        path="/onboarding"
+        element={user ? <OnboardingPage /> : <Navigate to="/login" replace />}
       />
       <Route
         path="/dashboard"

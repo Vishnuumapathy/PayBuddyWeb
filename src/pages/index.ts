@@ -1,5 +1,12 @@
 export { default as LoginPage } from './LoginPage';
+export { default as RegisterPage } from './RegisterPage';
+export { default as OnboardingPage } from './OnboardingPage';
 export { default as DashboardPage } from './DashboardPage';
 export { default as CustomersPage } from './CustomersPage';
+export { default as CustomerProfilePage } from './CustomerProfilePage';
 export { default as SalesPage } from './SalesPage';
+export { default as CreateSalePage } from './CreateSalePage';
 export { default as PaymentsPage } from './PaymentsPage';
+export { default as RecordPaymentPage } from './RecordPaymentPage';
+export { default as InstallmentsPage } from './InstallmentsPage';
+export { default as LedgerPage } from './LedgerPage';
