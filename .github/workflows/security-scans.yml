@@ -1,0 +1,52 @@
+name: PayBuddy Security & Vulnerability Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # Allows manual trigger from the Actions tab
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+  VITE_FIREBASE_API_KEY: 'AIzaSyADk2YxrASsShKpKcFda5sB-AkzO8L_Vts'
+  VITE_FIREBASE_AUTH_DOMAIN: 'paybuddy-2df9a.firebaseapp.com'
+  VITE_FIREBASE_PROJECT_ID: 'paybuddy-2df9a'
+  VITE_FIREBASE_STORAGE_BUCKET: 'paybuddy-2df9a.firebasestorage.app'
+  VITE_FIREBASE_MESSAGING_SENDER_ID: '113844888362'
+  VITE_FIREBASE_APP_ID: '1:113844888362:web:724656b24547aae2a47453'
+
+jobs:
+  security-scan:
+    name: Run Vulnerability Scans
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Root Dependencies
+        run: npm ci
+
+      - name: Install E2E Test Dependencies
+        run: |
+          cd tests
+          npm ci
+
+      - name: Run E2E Security Vulnerability Scans
+        run: |
+          # xvfb-run starts a virtual screen so that Chrome can run visibly inside GitHub Actions
+          xvfb-run --auto-servernum npm run test:security
+
+      - name: Upload Excel Security Scan Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vulnerability-Analysis-Report
+          path: tests/reports/Vulnerability_Analysis_Report.xlsx
+          if-no-files-found: error

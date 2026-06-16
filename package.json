@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test:web": "npm --prefix tests run test:web"
+    "test:web": "npm --prefix tests run test:web",
+    "test:security": "npm --prefix tests run test:security"
   },
   "dependencies": {
     "firebase": "^12.13.0",

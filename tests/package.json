@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test:web": "mocha selenium/**/*.test.js --timeout 60000",
+    "test:security": "node vulnerability/vulnerability_scan.js",
     "generate-report": "node reports/reporter.js"
   },
   "dependencies": {
