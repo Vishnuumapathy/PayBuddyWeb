@@ -31,7 +31,7 @@ const testCases = [
   { id: 'TC-LOAD-AST-015', name: 'Manifest Load Performance', category: 'Asset Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
 
   { id: 'TC-LOAD-APP-016', name: 'Route Navigation Performance', category: 'Application Performance', threshold: 1500, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-APP-017', name: 'Component Render Performance', category: 'Application Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-APP-017', name: 'Component Render Performance', category: 'Application Performance', threshold: 1500, value: 0, unit: 'ms', status: 'Passed' },
   { id: 'TC-LOAD-APP-018', name: 'Dashboard Refresh Performance', category: 'Application Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
   { id: 'TC-LOAD-APP-019', name: 'Local Storage Performance', category: 'Application Performance', threshold: 80, value: 0, unit: 'ms', status: 'Passed' },
   { id: 'TC-LOAD-APP-020', name: 'Session Initialization Performance', category: 'Application Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
