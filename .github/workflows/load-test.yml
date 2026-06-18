@@ -1,0 +1,47 @@
+name: PayBuddy Load & Performance Test
+
+on:
+  workflow_dispatch: # Allows manual trigger from the Actions tab
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+jobs:
+  load-test:
+    name: Run Performance Load Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Root Dependencies
+        run: npm ci
+
+      - name: Install E2E Test Dependencies
+        run: |
+          cd tests
+          npm ci
+
+      - name: Run Performance Load Tests
+        run: |
+          # xvfb-run starts a virtual screen so that Chrome can run visibly inside GitHub Actions
+          xvfb-run --auto-servernum node tests/load/load_test.js
+
+      - name: Upload Performance Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-reports
+          path: load-test-reports/
+          retention-days: 7
+          if-no-files-found: error
