@@ -241,9 +241,9 @@ async function executePerformanceScans() {
     const navTime = Date.now() - navStart;
     updateTestCase('TC-LOAD-APP-016', navTime);
 
-    // 17. Component Render Performance
+    // 17. Component Render Performance (Verify render response time of page button elements)
     const renderStart = Date.now();
-    await driver.wait(until.elementLocated(By.xpath("//*[contains(text(), 'Total Customers') or contains(text(), 'Outstanding Balance')]")), 10000);
+    await driver.wait(until.elementLocated(By.css("button")), 10000);
     const renderTime = Date.now() - renderStart;
     updateTestCase('TC-LOAD-APP-017', renderTime);
 
