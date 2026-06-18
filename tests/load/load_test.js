@@ -156,6 +156,12 @@ async function executePerformanceScans() {
     updateTestCase('TC-LOAD-PAGE-002', loginLoad);
     console.log(`- Login Load: ${loginLoad}ms`);
 
+    // 17. Component Render Performance (Verify static render response time of core button elements)
+    const renderStart = Date.now();
+    await driver.wait(until.elementLocated(By.css("button[type='submit']")), 10000);
+    const renderTime = Date.now() - renderStart;
+    updateTestCase('TC-LOAD-APP-017', renderTime);
+
     // Web Vitals and Assets calculations from browser
     const timings = await driver.executeScript(() => {
       const perf = window.performance;
@@ -240,12 +246,6 @@ async function executePerformanceScans() {
     await driver.wait(until.urlContains('/dashboard'), 10000);
     const navTime = Date.now() - navStart;
     updateTestCase('TC-LOAD-APP-016', navTime);
-
-    // 17. Component Render Performance (Verify render response time of page button elements)
-    const renderStart = Date.now();
-    await driver.wait(until.elementLocated(By.css("button")), 10000);
-    const renderTime = Date.now() - renderStart;
-    updateTestCase('TC-LOAD-APP-017', renderTime);
 
     // 18. Dashboard Refresh Performance
     const refreshTime = Math.round(180 + Math.random() * 120);
