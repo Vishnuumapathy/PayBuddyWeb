@@ -1,0 +1,2877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayBuddy Web Performance Load Test Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B0F19;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #6366F1;
+      --primary-glow: rgba(99, 102, 241, 0.15);
+      --success: #10B981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --error: #EF4444;
+      --error-glow: rgba(239, 68, 68, 0.15);
+      --text: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --border: rgba(255, 255, 255, 0.05);
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    header {
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+    header h1 {
+      font-family: 'Outfit', sans-serif;
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #A5B4FC 0%, #6366F1 50%, #34D399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    header p {
+      margin: 0.75rem 0 0;
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto 5rem;
+      padding: 0 1.5rem;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-cols: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .metric-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px var(--primary-glow);
+    }
+    .metric-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+      text-shadow: 0 0 20px var(--primary-glow);
+    }
+    .metric-val.pass {
+      color: var(--success);
+      text-shadow: 0 0 20px var(--success-glow);
+    }
+    .metric-val.fail {
+      color: var(--error);
+      text-shadow: 0 0 20px var(--error-glow);
+    }
+    .metric-lbl {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-cols: 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    @media(min-width: 992px) {
+      .grid-2 {
+        grid-template-cols: 5fr 3fr;
+      }
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    }
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 18px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    .controls-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    @media(min-width: 768px) {
+      .controls-row {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    .search-input {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      color: var(--text);
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+      width: 100%;
+      box-sizing: border-box;
+      transition: outline 0.2s, border-color 0.2s;
+    }
+    @media(min-width: 768px) {
+      .search-input {
+        max-width: 280px;
+      }
+    }
+    .search-input:focus {
+      outline: 2px solid var(--primary);
+      border-color: transparent;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .tab {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 0.5rem;
+      color: var(--text-muted);
+      padding: 0.5rem 0.875rem;
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+    }
+    .tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th, td {
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+    }
+    th {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border);
+      background: rgba(0, 0, 0, 0.15);
+    }
+    tr {
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.2s;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.725rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .badge.passed {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .badge.failed {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--error);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    footer {
+      text-align: center;
+      margin-top: 5rem;
+      padding: 2.5rem 0;
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PAYBUDDY PERFORMANCE & LOAD TEST REPORT</h1>
+    <p>Executed: 22-Jun-2026 | Infrastructure Target: Single-Instance Vercel Deployment</p>
+  </header>
+  <main>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-val">310</div>
+        <div class="metric-lbl">Total Scans</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val pass">310</div>
+        <div class="metric-lbl">Passed Cases</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val fail">0</div>
+        <div class="metric-lbl">Failed Cases</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">100%</div>
+        <div class="metric-lbl">Pass Ratio</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">690 ms</div>
+        <div class="metric-lbl">Avg Response Latency</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val pass">PASS</div>
+        <div class="metric-lbl">Overall Assessment</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="section-title">Detailed Execution Log</div>
+        <div class="controls-row">
+          <div class="tabs">
+            <button class="tab active" onclick="filterCategory('all', this)">All Categories</button>
+            <button class="tab" onclick="filterCategory('Page Load Performance', this)">Page Load</button>
+            <button class="tab" onclick="filterCategory('Web Vitals', this)">Web Vitals</button>
+            <button class="tab" onclick="filterCategory('Asset Performance', this)">Assets</button>
+            <button class="tab" onclick="filterCategory('Application Performance', this)">App</button>
+            <button class="tab" onclick="filterCategory('Firebase Performance', this)">Firebase</button>
+          </div>
+          <input type="text" class="search-input" id="searchBox" placeholder="Search tests..." onkeyup="filterSearch()">
+        </div>
+        <div style="overflow-x: auto; max-height: 520px; border-radius: 0.75rem; border: 1px solid var(--border);">
+          <table id="testTable">
+            <thead>
+              <tr>
+                <th>Test ID</th>
+                <th>Check Name</th>
+                <th>Measured</th>
+                <th>Threshold</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-001</td>
+                  <td style="font-weight: 500;" class="test-name">Home Page Load</td>
+                  <td style="font-weight: bold; color: var(--text);">532 ms</td>
+                  <td style="color: var(--text-muted);">3000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-002</td>
+                  <td style="font-weight: 500;" class="test-name">Login Page Load</td>
+                  <td style="font-weight: bold; color: var(--text);">121 ms</td>
+                  <td style="color: var(--text-muted);">3000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-003</td>
+                  <td style="font-weight: 500;" class="test-name">Dashboard Load</td>
+                  <td style="font-weight: bold; color: var(--text);">1366 ms</td>
+                  <td style="color: var(--text-muted);">4000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-004</td>
+                  <td style="font-weight: 500;" class="test-name">Reports Page Load</td>
+                  <td style="font-weight: bold; color: var(--text);">135 ms</td>
+                  <td style="color: var(--text-muted);">3000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-005</td>
+                  <td style="font-weight: 500;" class="test-name">Analytics Page Load</td>
+                  <td style="font-weight: bold; color: var(--text);">107 ms</td>
+                  <td style="color: var(--text-muted);">3000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-006</td>
+                  <td style="font-weight: 500;" class="test-name">First Contentful Paint</td>
+                  <td style="font-weight: bold; color: var(--text);">120 ms</td>
+                  <td style="color: var(--text-muted);">2000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-007</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint</td>
+                  <td style="font-weight: bold; color: var(--text);">270 ms</td>
+                  <td style="color: var(--text-muted);">3000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-008</td>
+                  <td style="font-weight: 500;" class="test-name">Speed Index</td>
+                  <td style="font-weight: bold; color: var(--text);">210 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-009</td>
+                  <td style="font-weight: 500;" class="test-name">Total Blocking Time</td>
+                  <td style="font-weight: bold; color: var(--text);">127 ms</td>
+                  <td style="color: var(--text-muted);">400 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-010</td>
+                  <td style="font-weight: 500;" class="test-name">Cumulative Layout Shift</td>
+                  <td style="font-weight: bold; color: var(--text);">0.021 score</td>
+                  <td style="color: var(--text-muted);">0.1 score</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-011</td>
+                  <td style="font-weight: 500;" class="test-name">CSS Load Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">35 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-012</td>
+                  <td style="font-weight: 500;" class="test-name">JavaScript Bundle Load</td>
+                  <td style="font-weight: bold; color: var(--text);">35 ms</td>
+                  <td style="color: var(--text-muted);">2000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-013</td>
+                  <td style="font-weight: 500;" class="test-name">Image Load Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">95 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-014</td>
+                  <td style="font-weight: 500;" class="test-name">Font Load Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">65 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-015</td>
+                  <td style="font-weight: 500;" class="test-name">Manifest Load Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">45 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-016</td>
+                  <td style="font-weight: 500;" class="test-name">Route Navigation Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">99 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-017</td>
+                  <td style="font-weight: 500;" class="test-name">Component Render Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">31 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-018</td>
+                  <td style="font-weight: 500;" class="test-name">Dashboard Refresh Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">272 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-019</td>
+                  <td style="font-weight: 500;" class="test-name">Local Storage Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">1 ms</td>
+                  <td style="color: var(--text-muted);">80 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-020</td>
+                  <td style="font-weight: 500;" class="test-name">Session Initialization Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">478 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-021</td>
+                  <td style="font-weight: 500;" class="test-name">Authentication Response Time</td>
+                  <td style="font-weight: bold; color: var(--text);">393 ms</td>
+                  <td style="color: var(--text-muted);">2000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-022</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore Read Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">287 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-023</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore Write Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">306 ms</td>
+                  <td style="color: var(--text-muted);">2000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-024</td>
+                  <td style="font-weight: 500;" class="test-name">Realtime Listener Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">192 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-025</td>
+                  <td style="font-weight: 500;" class="test-name">Data Refresh Performance</td>
+                  <td style="font-weight: bold; color: var(--text);">223 ms</td>
+                  <td style="color: var(--text-muted);">2000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-026</td>
+                  <td style="font-weight: 500;" class="test-name">Route /dashboard Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">876 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-027</td>
+                  <td style="font-weight: 500;" class="test-name">Route /customers Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1004 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-028</td>
+                  <td style="font-weight: 500;" class="test-name">Route /sales Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">890 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-029</td>
+                  <td style="font-weight: 500;" class="test-name">Route /payments Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">2202 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-030</td>
+                  <td style="font-weight: 500;" class="test-name">Route /ledger Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">679 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-031</td>
+                  <td style="font-weight: 500;" class="test-name">Route /installments Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">982 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-032</td>
+                  <td style="font-weight: 500;" class="test-name">Route /settings Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">955 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-033</td>
+                  <td style="font-weight: 500;" class="test-name">Route /sales/create Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1520 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-034</td>
+                  <td style="font-weight: 500;" class="test-name">Route /payments/record Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">610 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-035</td>
+                  <td style="font-weight: 500;" class="test-name">Route /profile Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">749 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-036</td>
+                  <td style="font-weight: 500;" class="test-name">Route /help Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">1211 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-037</td>
+                  <td style="font-weight: 500;" class="test-name">Route /support Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">2684 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-038</td>
+                  <td style="font-weight: 500;" class="test-name">Route /notifications Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">637 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-039</td>
+                  <td style="font-weight: 500;" class="test-name">Route /activity-log Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1163 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-040</td>
+                  <td style="font-weight: 500;" class="test-name">Route /login Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">1033 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-041</td>
+                  <td style="font-weight: 500;" class="test-name">Route /dashboard Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1445 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-042</td>
+                  <td style="font-weight: 500;" class="test-name">Route /customers Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">726 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-043</td>
+                  <td style="font-weight: 500;" class="test-name">Route /sales Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1180 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-044</td>
+                  <td style="font-weight: 500;" class="test-name">Route /payments Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">938 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-045</td>
+                  <td style="font-weight: 500;" class="test-name">Route /ledger Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1548 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-046</td>
+                  <td style="font-weight: 500;" class="test-name">Route /installments Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">973 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-047</td>
+                  <td style="font-weight: 500;" class="test-name">Route /settings Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1161 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-048</td>
+                  <td style="font-weight: 500;" class="test-name">Route /sales/create Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">1155 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-049</td>
+                  <td style="font-weight: 500;" class="test-name">Route /payments/record Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1425 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-050</td>
+                  <td style="font-weight: 500;" class="test-name">Route /profile Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1082 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-051</td>
+                  <td style="font-weight: 500;" class="test-name">Route /help Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1251 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-052</td>
+                  <td style="font-weight: 500;" class="test-name">Route /support Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">660 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-053</td>
+                  <td style="font-weight: 500;" class="test-name">Route /notifications Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">2756 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-054</td>
+                  <td style="font-weight: 500;" class="test-name">Route /activity-log Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1237 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-055</td>
+                  <td style="font-weight: 500;" class="test-name">Route /login Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">851 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-056</td>
+                  <td style="font-weight: 500;" class="test-name">Route /dashboard Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">837 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-057</td>
+                  <td style="font-weight: 500;" class="test-name">Route /customers Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1897 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-058</td>
+                  <td style="font-weight: 500;" class="test-name">Route /sales Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1053 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-059</td>
+                  <td style="font-weight: 500;" class="test-name">Route /payments Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1175 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-060</td>
+                  <td style="font-weight: 500;" class="test-name">Route /ledger Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">894 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-061</td>
+                  <td style="font-weight: 500;" class="test-name">Route /installments Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">2470 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-062</td>
+                  <td style="font-weight: 500;" class="test-name">Route /settings Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">912 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-063</td>
+                  <td style="font-weight: 500;" class="test-name">Route /sales/create Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">924 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-064</td>
+                  <td style="font-weight: 500;" class="test-name">Route /payments/record Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">1260 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-065</td>
+                  <td style="font-weight: 500;" class="test-name">Route /profile Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1460 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-066</td>
+                  <td style="font-weight: 500;" class="test-name">Route /help Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">638 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-067</td>
+                  <td style="font-weight: 500;" class="test-name">Route /support Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1233 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-068</td>
+                  <td style="font-weight: 500;" class="test-name">Route /notifications Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">1238 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-069</td>
+                  <td style="font-weight: 500;" class="test-name">Route /activity-log Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1527 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-070</td>
+                  <td style="font-weight: 500;" class="test-name">Route /login Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1223 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-071</td>
+                  <td style="font-weight: 500;" class="test-name">Route /dashboard Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1263 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-072</td>
+                  <td style="font-weight: 500;" class="test-name">Route /customers Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">970 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-073</td>
+                  <td style="font-weight: 500;" class="test-name">Route /sales Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1569 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-074</td>
+                  <td style="font-weight: 500;" class="test-name">Route /payments Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1151 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-075</td>
+                  <td style="font-weight: 500;" class="test-name">Route /ledger Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1200 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-076</td>
+                  <td style="font-weight: 500;" class="test-name">Route /installments Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">967 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-077</td>
+                  <td style="font-weight: 500;" class="test-name">Route /settings Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1642 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-078</td>
+                  <td style="font-weight: 500;" class="test-name">Route /sales/create Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1165 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-079</td>
+                  <td style="font-weight: 500;" class="test-name">Route /payments/record Load Speed (Service Worker Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">1167 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-080</td>
+                  <td style="font-weight: 500;" class="test-name">Route /profile Load Speed (No-Cache Header)</td>
+                  <td style="font-weight: bold; color: var(--text);">1215 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-081</td>
+                  <td style="font-weight: 500;" class="test-name">Route /help Load Speed (Cold Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">2482 ms</td>
+                  <td style="color: var(--text-muted);">3500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Page Load Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-PAGE-082</td>
+                  <td style="font-weight: 500;" class="test-name">Route /support Load Speed (Warm Cache)</td>
+                  <td style="font-weight: bold; color: var(--text);">640 ms</td>
+                  <td style="color: var(--text-muted);">1500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-026</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint audit on Login page</td>
+                  <td style="font-weight: bold; color: var(--text);">1821 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-027</td>
+                  <td style="font-weight: 500;" class="test-name">Speed Index audit on Dashboard page</td>
+                  <td style="font-weight: bold; color: var(--text);">904 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-028</td>
+                  <td style="font-weight: 500;" class="test-name">Total Blocking Time audit on Sales page</td>
+                  <td style="font-weight: bold; color: var(--text);">259 ms</td>
+                  <td style="color: var(--text-muted);">350 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-029</td>
+                  <td style="font-weight: 500;" class="test-name">Cumulative Layout Shift audit on Customers page</td>
+                  <td style="font-weight: bold; color: var(--text);">0.047 score</td>
+                  <td style="color: var(--text-muted);">0.1 score</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-030</td>
+                  <td style="font-weight: 500;" class="test-name">First Input Delay audit on Ledger page</td>
+                  <td style="font-weight: bold; color: var(--text);">1242 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-031</td>
+                  <td style="font-weight: 500;" class="test-name">Interaction to Next Paint audit on Installments page</td>
+                  <td style="font-weight: bold; color: var(--text);">939 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-032</td>
+                  <td style="font-weight: 500;" class="test-name">First Contentful Paint audit on Settings page</td>
+                  <td style="font-weight: bold; color: var(--text);">1224 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-033</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint audit on Home page</td>
+                  <td style="font-weight: bold; color: var(--text);">1849 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-034</td>
+                  <td style="font-weight: 500;" class="test-name">Speed Index audit on Login page</td>
+                  <td style="font-weight: bold; color: var(--text);">1464 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-035</td>
+                  <td style="font-weight: 500;" class="test-name">Total Blocking Time audit on Dashboard page</td>
+                  <td style="font-weight: bold; color: var(--text);">124 ms</td>
+                  <td style="color: var(--text-muted);">350 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-036</td>
+                  <td style="font-weight: 500;" class="test-name">Cumulative Layout Shift audit on Sales page</td>
+                  <td style="font-weight: bold; color: var(--text);">0.04 score</td>
+                  <td style="color: var(--text-muted);">0.1 score</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-037</td>
+                  <td style="font-weight: 500;" class="test-name">First Input Delay audit on Customers page</td>
+                  <td style="font-weight: bold; color: var(--text);">1874 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-038</td>
+                  <td style="font-weight: 500;" class="test-name">Interaction to Next Paint audit on Ledger page</td>
+                  <td style="font-weight: bold; color: var(--text);">1544 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-039</td>
+                  <td style="font-weight: 500;" class="test-name">First Contentful Paint audit on Installments page</td>
+                  <td style="font-weight: bold; color: var(--text);">1227 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-040</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint audit on Settings page</td>
+                  <td style="font-weight: bold; color: var(--text);">1328 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-041</td>
+                  <td style="font-weight: 500;" class="test-name">Speed Index audit on Home page</td>
+                  <td style="font-weight: bold; color: var(--text);">1409 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-042</td>
+                  <td style="font-weight: 500;" class="test-name">Total Blocking Time audit on Login page</td>
+                  <td style="font-weight: bold; color: var(--text);">239 ms</td>
+                  <td style="color: var(--text-muted);">350 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-043</td>
+                  <td style="font-weight: 500;" class="test-name">Cumulative Layout Shift audit on Dashboard page</td>
+                  <td style="font-weight: bold; color: var(--text);">0.043 score</td>
+                  <td style="color: var(--text-muted);">0.1 score</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-044</td>
+                  <td style="font-weight: 500;" class="test-name">First Input Delay audit on Sales page</td>
+                  <td style="font-weight: bold; color: var(--text);">1941 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-045</td>
+                  <td style="font-weight: 500;" class="test-name">Interaction to Next Paint audit on Customers page</td>
+                  <td style="font-weight: bold; color: var(--text);">935 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-046</td>
+                  <td style="font-weight: 500;" class="test-name">First Contentful Paint audit on Ledger page</td>
+                  <td style="font-weight: bold; color: var(--text);">1083 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-047</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint audit on Installments page</td>
+                  <td style="font-weight: bold; color: var(--text);">1370 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-048</td>
+                  <td style="font-weight: 500;" class="test-name">Speed Index audit on Settings page</td>
+                  <td style="font-weight: bold; color: var(--text);">1562 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-049</td>
+                  <td style="font-weight: 500;" class="test-name">Total Blocking Time audit on Home page</td>
+                  <td style="font-weight: bold; color: var(--text);">249 ms</td>
+                  <td style="color: var(--text-muted);">350 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-050</td>
+                  <td style="font-weight: 500;" class="test-name">Cumulative Layout Shift audit on Login page</td>
+                  <td style="font-weight: bold; color: var(--text);">0.032 score</td>
+                  <td style="color: var(--text-muted);">0.1 score</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-051</td>
+                  <td style="font-weight: 500;" class="test-name">First Input Delay audit on Dashboard page</td>
+                  <td style="font-weight: bold; color: var(--text);">1134 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-052</td>
+                  <td style="font-weight: 500;" class="test-name">Interaction to Next Paint audit on Sales page</td>
+                  <td style="font-weight: bold; color: var(--text);">954 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-053</td>
+                  <td style="font-weight: 500;" class="test-name">First Contentful Paint audit on Customers page</td>
+                  <td style="font-weight: bold; color: var(--text);">1404 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-054</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint audit on Ledger page</td>
+                  <td style="font-weight: bold; color: var(--text);">1493 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-055</td>
+                  <td style="font-weight: 500;" class="test-name">Speed Index audit on Installments page</td>
+                  <td style="font-weight: bold; color: var(--text);">1019 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-056</td>
+                  <td style="font-weight: 500;" class="test-name">Total Blocking Time audit on Settings page</td>
+                  <td style="font-weight: bold; color: var(--text);">222 ms</td>
+                  <td style="color: var(--text-muted);">350 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-057</td>
+                  <td style="font-weight: 500;" class="test-name">Cumulative Layout Shift audit on Home page</td>
+                  <td style="font-weight: bold; color: var(--text);">0.033 score</td>
+                  <td style="color: var(--text-muted);">0.1 score</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-058</td>
+                  <td style="font-weight: 500;" class="test-name">First Input Delay audit on Login page</td>
+                  <td style="font-weight: bold; color: var(--text);">1177 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-059</td>
+                  <td style="font-weight: 500;" class="test-name">Interaction to Next Paint audit on Dashboard page</td>
+                  <td style="font-weight: bold; color: var(--text);">1818 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-060</td>
+                  <td style="font-weight: 500;" class="test-name">First Contentful Paint audit on Sales page</td>
+                  <td style="font-weight: bold; color: var(--text);">1883 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-061</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint audit on Customers page</td>
+                  <td style="font-weight: bold; color: var(--text);">1031 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-062</td>
+                  <td style="font-weight: 500;" class="test-name">Speed Index audit on Ledger page</td>
+                  <td style="font-weight: bold; color: var(--text);">1014 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-063</td>
+                  <td style="font-weight: 500;" class="test-name">Total Blocking Time audit on Installments page</td>
+                  <td style="font-weight: bold; color: var(--text);">145 ms</td>
+                  <td style="color: var(--text-muted);">350 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-064</td>
+                  <td style="font-weight: 500;" class="test-name">Cumulative Layout Shift audit on Settings page</td>
+                  <td style="font-weight: bold; color: var(--text);">0.007 score</td>
+                  <td style="color: var(--text-muted);">0.1 score</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-065</td>
+                  <td style="font-weight: 500;" class="test-name">First Input Delay audit on Home page</td>
+                  <td style="font-weight: bold; color: var(--text);">1556 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-066</td>
+                  <td style="font-weight: 500;" class="test-name">Interaction to Next Paint audit on Login page</td>
+                  <td style="font-weight: bold; color: var(--text);">1434 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-067</td>
+                  <td style="font-weight: 500;" class="test-name">First Contentful Paint audit on Dashboard page</td>
+                  <td style="font-weight: bold; color: var(--text);">1413 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-068</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint audit on Sales page</td>
+                  <td style="font-weight: bold; color: var(--text);">963 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-069</td>
+                  <td style="font-weight: 500;" class="test-name">Speed Index audit on Customers page</td>
+                  <td style="font-weight: bold; color: var(--text);">1614 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-070</td>
+                  <td style="font-weight: 500;" class="test-name">Total Blocking Time audit on Ledger page</td>
+                  <td style="font-weight: bold; color: var(--text);">136 ms</td>
+                  <td style="color: var(--text-muted);">350 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-071</td>
+                  <td style="font-weight: 500;" class="test-name">Cumulative Layout Shift audit on Installments page</td>
+                  <td style="font-weight: bold; color: var(--text);">0.026 score</td>
+                  <td style="color: var(--text-muted);">0.1 score</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-072</td>
+                  <td style="font-weight: 500;" class="test-name">First Input Delay audit on Settings page</td>
+                  <td style="font-weight: bold; color: var(--text);">1190 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-073</td>
+                  <td style="font-weight: 500;" class="test-name">Interaction to Next Paint audit on Home page</td>
+                  <td style="font-weight: bold; color: var(--text);">1532 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-074</td>
+                  <td style="font-weight: 500;" class="test-name">First Contentful Paint audit on Login page</td>
+                  <td style="font-weight: bold; color: var(--text);">1698 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-075</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint audit on Dashboard page</td>
+                  <td style="font-weight: bold; color: var(--text);">1075 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-076</td>
+                  <td style="font-weight: 500;" class="test-name">Speed Index audit on Sales page</td>
+                  <td style="font-weight: bold; color: var(--text);">1714 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-077</td>
+                  <td style="font-weight: 500;" class="test-name">Total Blocking Time audit on Customers page</td>
+                  <td style="font-weight: bold; color: var(--text);">197 ms</td>
+                  <td style="color: var(--text-muted);">350 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-078</td>
+                  <td style="font-weight: 500;" class="test-name">Cumulative Layout Shift audit on Ledger page</td>
+                  <td style="font-weight: bold; color: var(--text);">0.006 score</td>
+                  <td style="color: var(--text-muted);">0.1 score</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-079</td>
+                  <td style="font-weight: 500;" class="test-name">First Input Delay audit on Installments page</td>
+                  <td style="font-weight: bold; color: var(--text);">1359 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-080</td>
+                  <td style="font-weight: 500;" class="test-name">Interaction to Next Paint audit on Settings page</td>
+                  <td style="font-weight: bold; color: var(--text);">1455 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-081</td>
+                  <td style="font-weight: 500;" class="test-name">First Contentful Paint audit on Home page</td>
+                  <td style="font-weight: bold; color: var(--text);">1735 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Web Vitals">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-VIT-082</td>
+                  <td style="font-weight: 500;" class="test-name">Largest Contentful Paint audit on Login page</td>
+                  <td style="font-weight: bold; color: var(--text);">1831 ms</td>
+                  <td style="color: var(--text-muted);">2500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-026</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset index.js main bundle (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">62 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-027</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset dashboard-chart.js component chunk (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">671 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-028</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset logo.svg brand image (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">84 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-029</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset Inter-Regular.woff2 font icon (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">455 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-030</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset manifest.webmanifest configuration (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">131 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-031</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset favicon.ico icon image (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">790 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-032</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset main.css bundle (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">139 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-033</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset index.js main bundle (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">408 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-034</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset dashboard-chart.js component chunk (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">90 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-035</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset logo.svg brand image (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">420 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-036</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset Inter-Regular.woff2 font icon (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">100 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-037</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset manifest.webmanifest configuration (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">675 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-038</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset favicon.ico icon image (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">141 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-039</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset main.css bundle (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">550 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-040</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset index.js main bundle (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">96 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-041</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset dashboard-chart.js component chunk (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">524 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-042</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset logo.svg brand image (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">120 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-043</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset Inter-Regular.woff2 font icon (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">785 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-044</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset manifest.webmanifest configuration (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">72 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-045</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset favicon.ico icon image (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">723 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-046</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset main.css bundle (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">115 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-047</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset index.js main bundle (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">723 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-048</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset dashboard-chart.js component chunk (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">148 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-049</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset logo.svg brand image (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">475 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-050</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset Inter-Regular.woff2 font icon (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">62 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-051</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset manifest.webmanifest configuration (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">422 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-052</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset favicon.ico icon image (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">149 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-053</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset main.css bundle (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">306 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-054</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset index.js main bundle (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">113 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-055</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset dashboard-chart.js component chunk (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">408 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-056</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset logo.svg brand image (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">141 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-057</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset Inter-Regular.woff2 font icon (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">309 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-058</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset manifest.webmanifest configuration (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">60 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-059</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset favicon.ico icon image (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">486 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-060</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset main.css bundle (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">90 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-061</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset index.js main bundle (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">481 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-062</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset dashboard-chart.js component chunk (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">68 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-063</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset logo.svg brand image (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">360 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-064</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset Inter-Regular.woff2 font icon (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">94 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-065</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset manifest.webmanifest configuration (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">442 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-066</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset favicon.ico icon image (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">129 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-067</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset main.css bundle (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">530 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-068</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset index.js main bundle (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">126 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-069</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset dashboard-chart.js component chunk (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">327 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-070</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset logo.svg brand image (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">76 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-071</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset Inter-Regular.woff2 font icon (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">783 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-072</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset manifest.webmanifest configuration (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">98 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-073</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset favicon.ico icon image (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">785 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-074</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset main.css bundle (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">151 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-075</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset index.js main bundle (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">387 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-076</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset dashboard-chart.js component chunk (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">68 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-077</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset logo.svg brand image (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">404 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-078</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset Inter-Regular.woff2 font icon (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">138 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-079</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset manifest.webmanifest configuration (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">720 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-080</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset favicon.ico icon image (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">69 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-081</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset main.css bundle (Direct Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">395 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Asset Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-AST-082</td>
+                  <td style="font-weight: 500;" class="test-name">Load time of asset index.js main bundle (Cached Connect)</td>
+                  <td style="font-weight: bold; color: var(--text);">147 ms</td>
+                  <td style="color: var(--text-muted);">200 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-026</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage read loop 100 iterations (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">26 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-027</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Session Storage init config map (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">59 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-028</td>
+                  <td style="font-weight: 500;" class="test-name">Action: IndexedDB open connection benchmark (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">328 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-029</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Component state update transition (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">178 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-030</td>
+                  <td style="font-weight: 500;" class="test-name">Action: List search index filters execution (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">162 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-031</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Pagination scroll offset render time (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">159 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-032</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Modal display backdrop transition (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">183 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-033</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Form validate regex patterns latency (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">391 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-034</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage write loop 100 iterations (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">71 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-035</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage read loop 100 iterations (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">58 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-036</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Session Storage init config map (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">68 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-037</td>
+                  <td style="font-weight: 500;" class="test-name">Action: IndexedDB open connection benchmark (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">213 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-038</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Component state update transition (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">305 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-039</td>
+                  <td style="font-weight: 500;" class="test-name">Action: List search index filters execution (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">329 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-040</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Pagination scroll offset render time (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">362 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-041</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Modal display backdrop transition (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">353 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-042</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Form validate regex patterns latency (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">344 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-043</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage write loop 100 iterations (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">74 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-044</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage read loop 100 iterations (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">69 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-045</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Session Storage init config map (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">48 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-046</td>
+                  <td style="font-weight: 500;" class="test-name">Action: IndexedDB open connection benchmark (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">382 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-047</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Component state update transition (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">414 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-048</td>
+                  <td style="font-weight: 500;" class="test-name">Action: List search index filters execution (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">368 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-049</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Pagination scroll offset render time (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">394 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-050</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Modal display backdrop transition (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">297 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-051</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Form validate regex patterns latency (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">237 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-052</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage write loop 100 iterations (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">58 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-053</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage read loop 100 iterations (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">58 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-054</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Session Storage init config map (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">73 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-055</td>
+                  <td style="font-weight: 500;" class="test-name">Action: IndexedDB open connection benchmark (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">159 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-056</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Component state update transition (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">397 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-057</td>
+                  <td style="font-weight: 500;" class="test-name">Action: List search index filters execution (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">306 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-058</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Pagination scroll offset render time (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">393 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-059</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Modal display backdrop transition (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">193 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-060</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Form validate regex patterns latency (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">278 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-061</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage write loop 100 iterations (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">58 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-062</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage read loop 100 iterations (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">61 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-063</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Session Storage init config map (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">58 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-064</td>
+                  <td style="font-weight: 500;" class="test-name">Action: IndexedDB open connection benchmark (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">382 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-065</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Component state update transition (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">425 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-066</td>
+                  <td style="font-weight: 500;" class="test-name">Action: List search index filters execution (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">170 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-067</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Pagination scroll offset render time (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">146 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-068</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Modal display backdrop transition (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">148 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-069</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Form validate regex patterns latency (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">359 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-070</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage write loop 100 iterations (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">44 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-071</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage read loop 100 iterations (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">50 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-072</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Session Storage init config map (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">29 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-073</td>
+                  <td style="font-weight: 500;" class="test-name">Action: IndexedDB open connection benchmark (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">356 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-074</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Component state update transition (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">416 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-075</td>
+                  <td style="font-weight: 500;" class="test-name">Action: List search index filters execution (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">308 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-076</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Pagination scroll offset render time (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">173 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-077</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Modal display backdrop transition (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">241 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-078</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Form validate regex patterns latency (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">425 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-079</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage write loop 100 iterations (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">68 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-080</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Local Storage read loop 100 iterations (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">46 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-081</td>
+                  <td style="font-weight: 500;" class="test-name">Action: Session Storage init config map (Direct Sync)</td>
+                  <td style="font-weight: bold; color: var(--text);">27 ms</td>
+                  <td style="color: var(--text-muted);">100 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Application Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-APP-082</td>
+                  <td style="font-weight: 500;" class="test-name">Action: IndexedDB open connection benchmark (Async Frame)</td>
+                  <td style="font-weight: bold; color: var(--text);">182 ms</td>
+                  <td style="color: var(--text-muted);">500 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-026</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /sales - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">836 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-027</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /payments - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">523 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-028</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /ledger - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">511 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-029</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /installments - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">1421 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-030</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /users - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">792 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-031</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /logs - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">756 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-032</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /metadata - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">569 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-033</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /configurations - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">520 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-034</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /notifications - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">904 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-035</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /customers - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">638 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-036</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /sales - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">1258 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-037</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /payments - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">400 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-038</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /ledger - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">694 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-039</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /installments - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">1373 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-040</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /users - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">397 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-041</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /logs - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">863 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-042</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /metadata - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">772 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-043</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /configurations - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">353 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-044</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /notifications - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">1426 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-045</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /customers - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">561 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-046</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /sales - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">1426 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-047</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /payments - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">735 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-048</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /ledger - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">523 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-049</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /installments - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">1171 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-050</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /users - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">504 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-051</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /logs - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">927 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-052</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /metadata - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">606 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-053</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /configurations - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">426 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-054</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /notifications - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">649 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-055</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /customers - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">717 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-056</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /sales - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">1305 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-057</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /payments - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">493 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-058</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /ledger - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">458 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-059</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /installments - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">1279 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-060</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /users - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">402 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-061</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /logs - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">872 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-062</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /metadata - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">739 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-063</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /configurations - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">417 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-064</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /notifications - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">1352 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-065</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /customers - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">794 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-066</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /sales - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">893 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-067</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /payments - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">379 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-068</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /ledger - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">378 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-069</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /installments - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">1055 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-070</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /users - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">539 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-071</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /logs - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">838 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-072</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /metadata - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">445 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-073</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /configurations - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">429 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-074</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /notifications - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">1426 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-075</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /customers - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">531 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-076</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /sales - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">1380 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-077</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /payments - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">518 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-078</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /ledger - Paginate collection offset</td>
+                  <td style="font-weight: bold; color: var(--text);">355 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-079</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /installments - Aggregate totals counts</td>
+                  <td style="font-weight: bold; color: var(--text);">707 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-080</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /users - Read Page Size 10</td>
+                  <td style="font-weight: bold; color: var(--text);">759 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-081</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /logs - Write single doc</td>
+                  <td style="font-weight: bold; color: var(--text);">1312 ms</td>
+                  <td style="color: var(--text-muted);">1800 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+                <tr class="test-row" data-category="Firebase Performance">
+                  <td style="font-family: monospace; font-weight: bold; color: var(--primary);">TC-LOAD-FB-082</td>
+                  <td style="font-weight: 500;" class="test-name">Firestore REST collection /metadata - Update query filters</td>
+                  <td style="font-weight: bold; color: var(--text);">538 ms</td>
+                  <td style="color: var(--text-muted);">1000 ms</td>
+                  <td><span class="badge passed">Passed</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="display: flex; flex-direction: column; justify-content: center; height: fit-content;">
+        <div class="section-title">Response Times by Category</div>
+        <div style="display: flex; justify-content: center;">
+          <svg width="100%" height="240" viewBox="0 0 450 240" style="background: transparent; overflow: visible;">
+            
+                <text x="10" y="39" fill="#9CA3AF" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700">Page Load Perfo...</text>
+                <rect x="150" y="25" width="200" height="18" rx="4" fill="url(#indigoGrad)" />
+                <text x="360" y="38" fill="#F3F4F6" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800">1162 ms</text>
+              
+                <text x="10" y="81" fill="#9CA3AF" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700">Web Vitals...</text>
+                <rect x="150" y="67" width="193.28743545611016" height="18" rx="4" fill="url(#indigoGrad)" />
+                <text x="353.2874354561102" y="80" fill="#F3F4F6" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800">1123 ms</text>
+              
+                <text x="10" y="123" fill="#9CA3AF" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700">Asset Performan...</text>
+                <rect x="150" y="109" width="50.25817555938038" height="18" rx="4" fill="url(#indigoGrad)" />
+                <text x="210.2581755593804" y="122" fill="#F3F4F6" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800">292 ms</text>
+              
+                <text x="10" y="165" fill="#9CA3AF" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700">Application Per...</text>
+                <rect x="150" y="151" width="35.628227194492254" height="18" rx="4" fill="url(#indigoGrad)" />
+                <text x="195.62822719449224" y="164" fill="#F3F4F6" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800">207 ms</text>
+              
+                <text x="10" y="207" fill="#9CA3AF" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700">Firebase Perfor...</text>
+                <rect x="150" y="193" width="125.64543889845095" height="18" rx="4" fill="url(#indigoGrad)" />
+                <text x="285.64543889845095" y="206" fill="#F3F4F6" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800">730 ms</text>
+              
+            <defs>
+              <linearGradient id="indigoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6366F1" />
+                <stop offset="100%" stop-color="#10B981" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    let activeCategory = 'all';
+
+    function filterCategory(cat, btn) {
+      activeCategory = cat;
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilter();
+    }
+
+    function filterSearch() {
+      applyFilter();
+    }
+
+    function applyFilter() {
+      const query = document.getElementById('searchBox').value.toLowerCase();
+      const rows = document.querySelectorAll('.test-row');
+      
+      rows.forEach(row => {
+        const cat = row.getAttribute('data-category');
+        const name = row.querySelector('.test-name').textContent.toLowerCase();
+        const id = row.cells[0].textContent.toLowerCase();
+        
+        const matchesCategory = (activeCategory === 'all' || cat === activeCategory);
+        const matchesSearch = (name.includes(query) || id.includes(query));
+        
+        if (matchesCategory && matchesSearch) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+  <footer>
+    PayBuddy Performance Scans &copy; 2026. Built securely under strict devops isolation rules.
+  </footer>
+</body>
+</html>

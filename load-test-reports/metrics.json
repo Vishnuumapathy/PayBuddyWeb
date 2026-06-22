@@ -1,0 +1,2801 @@
+{
+  "scanDate": "22-Jun-2026",
+  "totalTestCases": 310,
+  "passed": 310,
+  "failed": 0,
+  "passPercentage": "100%",
+  "averageResponseTime": "690ms",
+  "overallStatus": "PASS",
+  "testCases": [
+    {
+      "id": "TC-LOAD-PAGE-001",
+      "name": "Home Page Load",
+      "category": "Page Load Performance",
+      "value": 532,
+      "threshold": 3000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-002",
+      "name": "Login Page Load",
+      "category": "Page Load Performance",
+      "value": 121,
+      "threshold": 3000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-003",
+      "name": "Dashboard Load",
+      "category": "Page Load Performance",
+      "value": 1366,
+      "threshold": 4000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-004",
+      "name": "Reports Page Load",
+      "category": "Page Load Performance",
+      "value": 135,
+      "threshold": 3000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-005",
+      "name": "Analytics Page Load",
+      "category": "Page Load Performance",
+      "value": 107,
+      "threshold": 3000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-006",
+      "name": "First Contentful Paint",
+      "category": "Web Vitals",
+      "value": 120,
+      "threshold": 2000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-007",
+      "name": "Largest Contentful Paint",
+      "category": "Web Vitals",
+      "value": 270,
+      "threshold": 3000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-008",
+      "name": "Speed Index",
+      "category": "Web Vitals",
+      "value": 210,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-009",
+      "name": "Total Blocking Time",
+      "category": "Web Vitals",
+      "value": 127,
+      "threshold": 400,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-010",
+      "name": "Cumulative Layout Shift",
+      "category": "Web Vitals",
+      "value": 0.021,
+      "threshold": 0.1,
+      "unit": "score",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-011",
+      "name": "CSS Load Performance",
+      "category": "Asset Performance",
+      "value": 35,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-012",
+      "name": "JavaScript Bundle Load",
+      "category": "Asset Performance",
+      "value": 35,
+      "threshold": 2000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-013",
+      "name": "Image Load Performance",
+      "category": "Asset Performance",
+      "value": 95,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-014",
+      "name": "Font Load Performance",
+      "category": "Asset Performance",
+      "value": 65,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-015",
+      "name": "Manifest Load Performance",
+      "category": "Asset Performance",
+      "value": 45,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-016",
+      "name": "Route Navigation Performance",
+      "category": "Application Performance",
+      "value": 99,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-017",
+      "name": "Component Render Performance",
+      "category": "Application Performance",
+      "value": 31,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-018",
+      "name": "Dashboard Refresh Performance",
+      "category": "Application Performance",
+      "value": 272,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-019",
+      "name": "Local Storage Performance",
+      "category": "Application Performance",
+      "value": 1,
+      "threshold": 80,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-020",
+      "name": "Session Initialization Performance",
+      "category": "Application Performance",
+      "value": 478,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-021",
+      "name": "Authentication Response Time",
+      "category": "Firebase Performance",
+      "value": 393,
+      "threshold": 2000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-022",
+      "name": "Firestore Read Performance",
+      "category": "Firebase Performance",
+      "value": 287,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-023",
+      "name": "Firestore Write Performance",
+      "category": "Firebase Performance",
+      "value": 306,
+      "threshold": 2000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-024",
+      "name": "Realtime Listener Performance",
+      "category": "Firebase Performance",
+      "value": 192,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-025",
+      "name": "Data Refresh Performance",
+      "category": "Firebase Performance",
+      "value": 223,
+      "threshold": 2000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-026",
+      "name": "Route /dashboard Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 876,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-027",
+      "name": "Route /customers Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1004,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-028",
+      "name": "Route /sales Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 890,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-029",
+      "name": "Route /payments Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 2202,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-030",
+      "name": "Route /ledger Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 679,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-031",
+      "name": "Route /installments Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 982,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-032",
+      "name": "Route /settings Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 955,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-033",
+      "name": "Route /sales/create Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 1520,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-034",
+      "name": "Route /payments/record Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 610,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-035",
+      "name": "Route /profile Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 749,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-036",
+      "name": "Route /help Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 1211,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-037",
+      "name": "Route /support Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 2684,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-038",
+      "name": "Route /notifications Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 637,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-039",
+      "name": "Route /activity-log Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1163,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-040",
+      "name": "Route /login Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 1033,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-041",
+      "name": "Route /dashboard Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 1445,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-042",
+      "name": "Route /customers Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 726,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-043",
+      "name": "Route /sales Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1180,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-044",
+      "name": "Route /payments Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 938,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-045",
+      "name": "Route /ledger Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 1548,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-046",
+      "name": "Route /installments Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 973,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-047",
+      "name": "Route /settings Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1161,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-048",
+      "name": "Route /sales/create Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 1155,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-049",
+      "name": "Route /payments/record Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 1425,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-050",
+      "name": "Route /profile Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 1082,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-051",
+      "name": "Route /help Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1251,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-052",
+      "name": "Route /support Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 660,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-053",
+      "name": "Route /notifications Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 2756,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-054",
+      "name": "Route /activity-log Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 1237,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-055",
+      "name": "Route /login Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 851,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-056",
+      "name": "Route /dashboard Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 837,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-057",
+      "name": "Route /customers Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 1897,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-058",
+      "name": "Route /sales Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 1053,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-059",
+      "name": "Route /payments Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1175,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-060",
+      "name": "Route /ledger Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 894,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-061",
+      "name": "Route /installments Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 2470,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-062",
+      "name": "Route /settings Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 912,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-063",
+      "name": "Route /sales/create Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 924,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-064",
+      "name": "Route /payments/record Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 1260,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-065",
+      "name": "Route /profile Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 1460,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-066",
+      "name": "Route /help Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 638,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-067",
+      "name": "Route /support Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1233,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-068",
+      "name": "Route /notifications Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 1238,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-069",
+      "name": "Route /activity-log Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 1527,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-070",
+      "name": "Route /login Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 1223,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-071",
+      "name": "Route /dashboard Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1263,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-072",
+      "name": "Route /customers Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 970,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-073",
+      "name": "Route /sales Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 1569,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-074",
+      "name": "Route /payments Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 1151,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-075",
+      "name": "Route /ledger Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1200,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-076",
+      "name": "Route /installments Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 967,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-077",
+      "name": "Route /settings Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 1642,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-078",
+      "name": "Route /sales/create Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 1165,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-079",
+      "name": "Route /payments/record Load Speed (Service Worker Cache)",
+      "category": "Page Load Performance",
+      "value": 1167,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-080",
+      "name": "Route /profile Load Speed (No-Cache Header)",
+      "category": "Page Load Performance",
+      "value": 1215,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-081",
+      "name": "Route /help Load Speed (Cold Cache)",
+      "category": "Page Load Performance",
+      "value": 2482,
+      "threshold": 3500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-PAGE-082",
+      "name": "Route /support Load Speed (Warm Cache)",
+      "category": "Page Load Performance",
+      "value": 640,
+      "threshold": 1500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-026",
+      "name": "Largest Contentful Paint audit on Login page",
+      "category": "Web Vitals",
+      "value": 1821,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-027",
+      "name": "Speed Index audit on Dashboard page",
+      "category": "Web Vitals",
+      "value": 904,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-028",
+      "name": "Total Blocking Time audit on Sales page",
+      "category": "Web Vitals",
+      "value": 259,
+      "threshold": 350,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-029",
+      "name": "Cumulative Layout Shift audit on Customers page",
+      "category": "Web Vitals",
+      "value": 0.047,
+      "threshold": 0.1,
+      "unit": "score",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-030",
+      "name": "First Input Delay audit on Ledger page",
+      "category": "Web Vitals",
+      "value": 1242,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-031",
+      "name": "Interaction to Next Paint audit on Installments page",
+      "category": "Web Vitals",
+      "value": 939,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-032",
+      "name": "First Contentful Paint audit on Settings page",
+      "category": "Web Vitals",
+      "value": 1224,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-033",
+      "name": "Largest Contentful Paint audit on Home page",
+      "category": "Web Vitals",
+      "value": 1849,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-034",
+      "name": "Speed Index audit on Login page",
+      "category": "Web Vitals",
+      "value": 1464,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-035",
+      "name": "Total Blocking Time audit on Dashboard page",
+      "category": "Web Vitals",
+      "value": 124,
+      "threshold": 350,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-036",
+      "name": "Cumulative Layout Shift audit on Sales page",
+      "category": "Web Vitals",
+      "value": 0.04,
+      "threshold": 0.1,
+      "unit": "score",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-037",
+      "name": "First Input Delay audit on Customers page",
+      "category": "Web Vitals",
+      "value": 1874,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-038",
+      "name": "Interaction to Next Paint audit on Ledger page",
+      "category": "Web Vitals",
+      "value": 1544,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-039",
+      "name": "First Contentful Paint audit on Installments page",
+      "category": "Web Vitals",
+      "value": 1227,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-040",
+      "name": "Largest Contentful Paint audit on Settings page",
+      "category": "Web Vitals",
+      "value": 1328,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-041",
+      "name": "Speed Index audit on Home page",
+      "category": "Web Vitals",
+      "value": 1409,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-042",
+      "name": "Total Blocking Time audit on Login page",
+      "category": "Web Vitals",
+      "value": 239,
+      "threshold": 350,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-043",
+      "name": "Cumulative Layout Shift audit on Dashboard page",
+      "category": "Web Vitals",
+      "value": 0.043,
+      "threshold": 0.1,
+      "unit": "score",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-044",
+      "name": "First Input Delay audit on Sales page",
+      "category": "Web Vitals",
+      "value": 1941,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-045",
+      "name": "Interaction to Next Paint audit on Customers page",
+      "category": "Web Vitals",
+      "value": 935,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-046",
+      "name": "First Contentful Paint audit on Ledger page",
+      "category": "Web Vitals",
+      "value": 1083,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-047",
+      "name": "Largest Contentful Paint audit on Installments page",
+      "category": "Web Vitals",
+      "value": 1370,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-048",
+      "name": "Speed Index audit on Settings page",
+      "category": "Web Vitals",
+      "value": 1562,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-049",
+      "name": "Total Blocking Time audit on Home page",
+      "category": "Web Vitals",
+      "value": 249,
+      "threshold": 350,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-050",
+      "name": "Cumulative Layout Shift audit on Login page",
+      "category": "Web Vitals",
+      "value": 0.032,
+      "threshold": 0.1,
+      "unit": "score",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-051",
+      "name": "First Input Delay audit on Dashboard page",
+      "category": "Web Vitals",
+      "value": 1134,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-052",
+      "name": "Interaction to Next Paint audit on Sales page",
+      "category": "Web Vitals",
+      "value": 954,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-053",
+      "name": "First Contentful Paint audit on Customers page",
+      "category": "Web Vitals",
+      "value": 1404,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-054",
+      "name": "Largest Contentful Paint audit on Ledger page",
+      "category": "Web Vitals",
+      "value": 1493,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-055",
+      "name": "Speed Index audit on Installments page",
+      "category": "Web Vitals",
+      "value": 1019,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-056",
+      "name": "Total Blocking Time audit on Settings page",
+      "category": "Web Vitals",
+      "value": 222,
+      "threshold": 350,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-057",
+      "name": "Cumulative Layout Shift audit on Home page",
+      "category": "Web Vitals",
+      "value": 0.033,
+      "threshold": 0.1,
+      "unit": "score",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-058",
+      "name": "First Input Delay audit on Login page",
+      "category": "Web Vitals",
+      "value": 1177,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-059",
+      "name": "Interaction to Next Paint audit on Dashboard page",
+      "category": "Web Vitals",
+      "value": 1818,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-060",
+      "name": "First Contentful Paint audit on Sales page",
+      "category": "Web Vitals",
+      "value": 1883,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-061",
+      "name": "Largest Contentful Paint audit on Customers page",
+      "category": "Web Vitals",
+      "value": 1031,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-062",
+      "name": "Speed Index audit on Ledger page",
+      "category": "Web Vitals",
+      "value": 1014,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-063",
+      "name": "Total Blocking Time audit on Installments page",
+      "category": "Web Vitals",
+      "value": 145,
+      "threshold": 350,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-064",
+      "name": "Cumulative Layout Shift audit on Settings page",
+      "category": "Web Vitals",
+      "value": 0.007,
+      "threshold": 0.1,
+      "unit": "score",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-065",
+      "name": "First Input Delay audit on Home page",
+      "category": "Web Vitals",
+      "value": 1556,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-066",
+      "name": "Interaction to Next Paint audit on Login page",
+      "category": "Web Vitals",
+      "value": 1434,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-067",
+      "name": "First Contentful Paint audit on Dashboard page",
+      "category": "Web Vitals",
+      "value": 1413,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-068",
+      "name": "Largest Contentful Paint audit on Sales page",
+      "category": "Web Vitals",
+      "value": 963,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-069",
+      "name": "Speed Index audit on Customers page",
+      "category": "Web Vitals",
+      "value": 1614,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-070",
+      "name": "Total Blocking Time audit on Ledger page",
+      "category": "Web Vitals",
+      "value": 136,
+      "threshold": 350,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-071",
+      "name": "Cumulative Layout Shift audit on Installments page",
+      "category": "Web Vitals",
+      "value": 0.026,
+      "threshold": 0.1,
+      "unit": "score",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-072",
+      "name": "First Input Delay audit on Settings page",
+      "category": "Web Vitals",
+      "value": 1190,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-073",
+      "name": "Interaction to Next Paint audit on Home page",
+      "category": "Web Vitals",
+      "value": 1532,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-074",
+      "name": "First Contentful Paint audit on Login page",
+      "category": "Web Vitals",
+      "value": 1698,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-075",
+      "name": "Largest Contentful Paint audit on Dashboard page",
+      "category": "Web Vitals",
+      "value": 1075,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-076",
+      "name": "Speed Index audit on Sales page",
+      "category": "Web Vitals",
+      "value": 1714,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-077",
+      "name": "Total Blocking Time audit on Customers page",
+      "category": "Web Vitals",
+      "value": 197,
+      "threshold": 350,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-078",
+      "name": "Cumulative Layout Shift audit on Ledger page",
+      "category": "Web Vitals",
+      "value": 0.006,
+      "threshold": 0.1,
+      "unit": "score",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-079",
+      "name": "First Input Delay audit on Installments page",
+      "category": "Web Vitals",
+      "value": 1359,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-080",
+      "name": "Interaction to Next Paint audit on Settings page",
+      "category": "Web Vitals",
+      "value": 1455,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-081",
+      "name": "First Contentful Paint audit on Home page",
+      "category": "Web Vitals",
+      "value": 1735,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-VIT-082",
+      "name": "Largest Contentful Paint audit on Login page",
+      "category": "Web Vitals",
+      "value": 1831,
+      "threshold": 2500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-026",
+      "name": "Load time of asset index.js main bundle (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 62,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-027",
+      "name": "Load time of asset dashboard-chart.js component chunk (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 671,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-028",
+      "name": "Load time of asset logo.svg brand image (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 84,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-029",
+      "name": "Load time of asset Inter-Regular.woff2 font icon (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 455,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-030",
+      "name": "Load time of asset manifest.webmanifest configuration (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 131,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-031",
+      "name": "Load time of asset favicon.ico icon image (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 790,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-032",
+      "name": "Load time of asset main.css bundle (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 139,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-033",
+      "name": "Load time of asset index.js main bundle (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 408,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-034",
+      "name": "Load time of asset dashboard-chart.js component chunk (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 90,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-035",
+      "name": "Load time of asset logo.svg brand image (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 420,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-036",
+      "name": "Load time of asset Inter-Regular.woff2 font icon (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 100,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-037",
+      "name": "Load time of asset manifest.webmanifest configuration (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 675,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-038",
+      "name": "Load time of asset favicon.ico icon image (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 141,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-039",
+      "name": "Load time of asset main.css bundle (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 550,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-040",
+      "name": "Load time of asset index.js main bundle (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 96,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-041",
+      "name": "Load time of asset dashboard-chart.js component chunk (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 524,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-042",
+      "name": "Load time of asset logo.svg brand image (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 120,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-043",
+      "name": "Load time of asset Inter-Regular.woff2 font icon (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 785,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-044",
+      "name": "Load time of asset manifest.webmanifest configuration (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 72,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-045",
+      "name": "Load time of asset favicon.ico icon image (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 723,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-046",
+      "name": "Load time of asset main.css bundle (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 115,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-047",
+      "name": "Load time of asset index.js main bundle (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 723,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-048",
+      "name": "Load time of asset dashboard-chart.js component chunk (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 148,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-049",
+      "name": "Load time of asset logo.svg brand image (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 475,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-050",
+      "name": "Load time of asset Inter-Regular.woff2 font icon (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 62,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-051",
+      "name": "Load time of asset manifest.webmanifest configuration (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 422,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-052",
+      "name": "Load time of asset favicon.ico icon image (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 149,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-053",
+      "name": "Load time of asset main.css bundle (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 306,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-054",
+      "name": "Load time of asset index.js main bundle (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 113,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-055",
+      "name": "Load time of asset dashboard-chart.js component chunk (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 408,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-056",
+      "name": "Load time of asset logo.svg brand image (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 141,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-057",
+      "name": "Load time of asset Inter-Regular.woff2 font icon (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 309,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-058",
+      "name": "Load time of asset manifest.webmanifest configuration (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 60,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-059",
+      "name": "Load time of asset favicon.ico icon image (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 486,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-060",
+      "name": "Load time of asset main.css bundle (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 90,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-061",
+      "name": "Load time of asset index.js main bundle (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 481,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-062",
+      "name": "Load time of asset dashboard-chart.js component chunk (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 68,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-063",
+      "name": "Load time of asset logo.svg brand image (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 360,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-064",
+      "name": "Load time of asset Inter-Regular.woff2 font icon (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 94,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-065",
+      "name": "Load time of asset manifest.webmanifest configuration (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 442,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-066",
+      "name": "Load time of asset favicon.ico icon image (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 129,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-067",
+      "name": "Load time of asset main.css bundle (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 530,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-068",
+      "name": "Load time of asset index.js main bundle (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 126,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-069",
+      "name": "Load time of asset dashboard-chart.js component chunk (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 327,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-070",
+      "name": "Load time of asset logo.svg brand image (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 76,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-071",
+      "name": "Load time of asset Inter-Regular.woff2 font icon (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 783,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-072",
+      "name": "Load time of asset manifest.webmanifest configuration (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 98,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-073",
+      "name": "Load time of asset favicon.ico icon image (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 785,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-074",
+      "name": "Load time of asset main.css bundle (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 151,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-075",
+      "name": "Load time of asset index.js main bundle (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 387,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-076",
+      "name": "Load time of asset dashboard-chart.js component chunk (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 68,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-077",
+      "name": "Load time of asset logo.svg brand image (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 404,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-078",
+      "name": "Load time of asset Inter-Regular.woff2 font icon (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 138,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-079",
+      "name": "Load time of asset manifest.webmanifest configuration (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 720,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-080",
+      "name": "Load time of asset favicon.ico icon image (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 69,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-081",
+      "name": "Load time of asset main.css bundle (Direct Connect)",
+      "category": "Asset Performance",
+      "value": 395,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-AST-082",
+      "name": "Load time of asset index.js main bundle (Cached Connect)",
+      "category": "Asset Performance",
+      "value": 147,
+      "threshold": 200,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-026",
+      "name": "Action: Local Storage read loop 100 iterations (Async Frame)",
+      "category": "Application Performance",
+      "value": 26,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-027",
+      "name": "Action: Session Storage init config map (Direct Sync)",
+      "category": "Application Performance",
+      "value": 59,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-028",
+      "name": "Action: IndexedDB open connection benchmark (Async Frame)",
+      "category": "Application Performance",
+      "value": 328,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-029",
+      "name": "Action: Component state update transition (Direct Sync)",
+      "category": "Application Performance",
+      "value": 178,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-030",
+      "name": "Action: List search index filters execution (Async Frame)",
+      "category": "Application Performance",
+      "value": 162,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-031",
+      "name": "Action: Pagination scroll offset render time (Direct Sync)",
+      "category": "Application Performance",
+      "value": 159,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-032",
+      "name": "Action: Modal display backdrop transition (Async Frame)",
+      "category": "Application Performance",
+      "value": 183,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-033",
+      "name": "Action: Form validate regex patterns latency (Direct Sync)",
+      "category": "Application Performance",
+      "value": 391,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-034",
+      "name": "Action: Local Storage write loop 100 iterations (Async Frame)",
+      "category": "Application Performance",
+      "value": 71,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-035",
+      "name": "Action: Local Storage read loop 100 iterations (Direct Sync)",
+      "category": "Application Performance",
+      "value": 58,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-036",
+      "name": "Action: Session Storage init config map (Async Frame)",
+      "category": "Application Performance",
+      "value": 68,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-037",
+      "name": "Action: IndexedDB open connection benchmark (Direct Sync)",
+      "category": "Application Performance",
+      "value": 213,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-038",
+      "name": "Action: Component state update transition (Async Frame)",
+      "category": "Application Performance",
+      "value": 305,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-039",
+      "name": "Action: List search index filters execution (Direct Sync)",
+      "category": "Application Performance",
+      "value": 329,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-040",
+      "name": "Action: Pagination scroll offset render time (Async Frame)",
+      "category": "Application Performance",
+      "value": 362,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-041",
+      "name": "Action: Modal display backdrop transition (Direct Sync)",
+      "category": "Application Performance",
+      "value": 353,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-042",
+      "name": "Action: Form validate regex patterns latency (Async Frame)",
+      "category": "Application Performance",
+      "value": 344,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-043",
+      "name": "Action: Local Storage write loop 100 iterations (Direct Sync)",
+      "category": "Application Performance",
+      "value": 74,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-044",
+      "name": "Action: Local Storage read loop 100 iterations (Async Frame)",
+      "category": "Application Performance",
+      "value": 69,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-045",
+      "name": "Action: Session Storage init config map (Direct Sync)",
+      "category": "Application Performance",
+      "value": 48,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-046",
+      "name": "Action: IndexedDB open connection benchmark (Async Frame)",
+      "category": "Application Performance",
+      "value": 382,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-047",
+      "name": "Action: Component state update transition (Direct Sync)",
+      "category": "Application Performance",
+      "value": 414,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-048",
+      "name": "Action: List search index filters execution (Async Frame)",
+      "category": "Application Performance",
+      "value": 368,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-049",
+      "name": "Action: Pagination scroll offset render time (Direct Sync)",
+      "category": "Application Performance",
+      "value": 394,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-050",
+      "name": "Action: Modal display backdrop transition (Async Frame)",
+      "category": "Application Performance",
+      "value": 297,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-051",
+      "name": "Action: Form validate regex patterns latency (Direct Sync)",
+      "category": "Application Performance",
+      "value": 237,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-052",
+      "name": "Action: Local Storage write loop 100 iterations (Async Frame)",
+      "category": "Application Performance",
+      "value": 58,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-053",
+      "name": "Action: Local Storage read loop 100 iterations (Direct Sync)",
+      "category": "Application Performance",
+      "value": 58,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-054",
+      "name": "Action: Session Storage init config map (Async Frame)",
+      "category": "Application Performance",
+      "value": 73,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-055",
+      "name": "Action: IndexedDB open connection benchmark (Direct Sync)",
+      "category": "Application Performance",
+      "value": 159,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-056",
+      "name": "Action: Component state update transition (Async Frame)",
+      "category": "Application Performance",
+      "value": 397,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-057",
+      "name": "Action: List search index filters execution (Direct Sync)",
+      "category": "Application Performance",
+      "value": 306,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-058",
+      "name": "Action: Pagination scroll offset render time (Async Frame)",
+      "category": "Application Performance",
+      "value": 393,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-059",
+      "name": "Action: Modal display backdrop transition (Direct Sync)",
+      "category": "Application Performance",
+      "value": 193,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-060",
+      "name": "Action: Form validate regex patterns latency (Async Frame)",
+      "category": "Application Performance",
+      "value": 278,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-061",
+      "name": "Action: Local Storage write loop 100 iterations (Direct Sync)",
+      "category": "Application Performance",
+      "value": 58,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-062",
+      "name": "Action: Local Storage read loop 100 iterations (Async Frame)",
+      "category": "Application Performance",
+      "value": 61,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-063",
+      "name": "Action: Session Storage init config map (Direct Sync)",
+      "category": "Application Performance",
+      "value": 58,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-064",
+      "name": "Action: IndexedDB open connection benchmark (Async Frame)",
+      "category": "Application Performance",
+      "value": 382,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-065",
+      "name": "Action: Component state update transition (Direct Sync)",
+      "category": "Application Performance",
+      "value": 425,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-066",
+      "name": "Action: List search index filters execution (Async Frame)",
+      "category": "Application Performance",
+      "value": 170,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-067",
+      "name": "Action: Pagination scroll offset render time (Direct Sync)",
+      "category": "Application Performance",
+      "value": 146,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-068",
+      "name": "Action: Modal display backdrop transition (Async Frame)",
+      "category": "Application Performance",
+      "value": 148,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-069",
+      "name": "Action: Form validate regex patterns latency (Direct Sync)",
+      "category": "Application Performance",
+      "value": 359,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-070",
+      "name": "Action: Local Storage write loop 100 iterations (Async Frame)",
+      "category": "Application Performance",
+      "value": 44,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-071",
+      "name": "Action: Local Storage read loop 100 iterations (Direct Sync)",
+      "category": "Application Performance",
+      "value": 50,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-072",
+      "name": "Action: Session Storage init config map (Async Frame)",
+      "category": "Application Performance",
+      "value": 29,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-073",
+      "name": "Action: IndexedDB open connection benchmark (Direct Sync)",
+      "category": "Application Performance",
+      "value": 356,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-074",
+      "name": "Action: Component state update transition (Async Frame)",
+      "category": "Application Performance",
+      "value": 416,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-075",
+      "name": "Action: List search index filters execution (Direct Sync)",
+      "category": "Application Performance",
+      "value": 308,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-076",
+      "name": "Action: Pagination scroll offset render time (Async Frame)",
+      "category": "Application Performance",
+      "value": 173,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-077",
+      "name": "Action: Modal display backdrop transition (Direct Sync)",
+      "category": "Application Performance",
+      "value": 241,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-078",
+      "name": "Action: Form validate regex patterns latency (Async Frame)",
+      "category": "Application Performance",
+      "value": 425,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-079",
+      "name": "Action: Local Storage write loop 100 iterations (Direct Sync)",
+      "category": "Application Performance",
+      "value": 68,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-080",
+      "name": "Action: Local Storage read loop 100 iterations (Async Frame)",
+      "category": "Application Performance",
+      "value": 46,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-081",
+      "name": "Action: Session Storage init config map (Direct Sync)",
+      "category": "Application Performance",
+      "value": 27,
+      "threshold": 100,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-APP-082",
+      "name": "Action: IndexedDB open connection benchmark (Async Frame)",
+      "category": "Application Performance",
+      "value": 182,
+      "threshold": 500,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-026",
+      "name": "Firestore REST collection /sales - Write single doc",
+      "category": "Firebase Performance",
+      "value": 836,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-027",
+      "name": "Firestore REST collection /payments - Update query filters",
+      "category": "Firebase Performance",
+      "value": 523,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-028",
+      "name": "Firestore REST collection /ledger - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 511,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-029",
+      "name": "Firestore REST collection /installments - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 1421,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-030",
+      "name": "Firestore REST collection /users - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 792,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-031",
+      "name": "Firestore REST collection /logs - Write single doc",
+      "category": "Firebase Performance",
+      "value": 756,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-032",
+      "name": "Firestore REST collection /metadata - Update query filters",
+      "category": "Firebase Performance",
+      "value": 569,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-033",
+      "name": "Firestore REST collection /configurations - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 520,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-034",
+      "name": "Firestore REST collection /notifications - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 904,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-035",
+      "name": "Firestore REST collection /customers - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 638,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-036",
+      "name": "Firestore REST collection /sales - Write single doc",
+      "category": "Firebase Performance",
+      "value": 1258,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-037",
+      "name": "Firestore REST collection /payments - Update query filters",
+      "category": "Firebase Performance",
+      "value": 400,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-038",
+      "name": "Firestore REST collection /ledger - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 694,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-039",
+      "name": "Firestore REST collection /installments - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 1373,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-040",
+      "name": "Firestore REST collection /users - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 397,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-041",
+      "name": "Firestore REST collection /logs - Write single doc",
+      "category": "Firebase Performance",
+      "value": 863,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-042",
+      "name": "Firestore REST collection /metadata - Update query filters",
+      "category": "Firebase Performance",
+      "value": 772,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-043",
+      "name": "Firestore REST collection /configurations - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 353,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-044",
+      "name": "Firestore REST collection /notifications - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 1426,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-045",
+      "name": "Firestore REST collection /customers - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 561,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-046",
+      "name": "Firestore REST collection /sales - Write single doc",
+      "category": "Firebase Performance",
+      "value": 1426,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-047",
+      "name": "Firestore REST collection /payments - Update query filters",
+      "category": "Firebase Performance",
+      "value": 735,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-048",
+      "name": "Firestore REST collection /ledger - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 523,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-049",
+      "name": "Firestore REST collection /installments - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 1171,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-050",
+      "name": "Firestore REST collection /users - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 504,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-051",
+      "name": "Firestore REST collection /logs - Write single doc",
+      "category": "Firebase Performance",
+      "value": 927,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-052",
+      "name": "Firestore REST collection /metadata - Update query filters",
+      "category": "Firebase Performance",
+      "value": 606,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-053",
+      "name": "Firestore REST collection /configurations - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 426,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-054",
+      "name": "Firestore REST collection /notifications - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 649,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-055",
+      "name": "Firestore REST collection /customers - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 717,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-056",
+      "name": "Firestore REST collection /sales - Write single doc",
+      "category": "Firebase Performance",
+      "value": 1305,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-057",
+      "name": "Firestore REST collection /payments - Update query filters",
+      "category": "Firebase Performance",
+      "value": 493,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-058",
+      "name": "Firestore REST collection /ledger - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 458,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-059",
+      "name": "Firestore REST collection /installments - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 1279,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-060",
+      "name": "Firestore REST collection /users - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 402,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-061",
+      "name": "Firestore REST collection /logs - Write single doc",
+      "category": "Firebase Performance",
+      "value": 872,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-062",
+      "name": "Firestore REST collection /metadata - Update query filters",
+      "category": "Firebase Performance",
+      "value": 739,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-063",
+      "name": "Firestore REST collection /configurations - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 417,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-064",
+      "name": "Firestore REST collection /notifications - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 1352,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-065",
+      "name": "Firestore REST collection /customers - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 794,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-066",
+      "name": "Firestore REST collection /sales - Write single doc",
+      "category": "Firebase Performance",
+      "value": 893,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-067",
+      "name": "Firestore REST collection /payments - Update query filters",
+      "category": "Firebase Performance",
+      "value": 379,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-068",
+      "name": "Firestore REST collection /ledger - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 378,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-069",
+      "name": "Firestore REST collection /installments - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 1055,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-070",
+      "name": "Firestore REST collection /users - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 539,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-071",
+      "name": "Firestore REST collection /logs - Write single doc",
+      "category": "Firebase Performance",
+      "value": 838,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-072",
+      "name": "Firestore REST collection /metadata - Update query filters",
+      "category": "Firebase Performance",
+      "value": 445,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-073",
+      "name": "Firestore REST collection /configurations - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 429,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-074",
+      "name": "Firestore REST collection /notifications - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 1426,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-075",
+      "name": "Firestore REST collection /customers - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 531,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-076",
+      "name": "Firestore REST collection /sales - Write single doc",
+      "category": "Firebase Performance",
+      "value": 1380,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-077",
+      "name": "Firestore REST collection /payments - Update query filters",
+      "category": "Firebase Performance",
+      "value": 518,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-078",
+      "name": "Firestore REST collection /ledger - Paginate collection offset",
+      "category": "Firebase Performance",
+      "value": 355,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-079",
+      "name": "Firestore REST collection /installments - Aggregate totals counts",
+      "category": "Firebase Performance",
+      "value": 707,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-080",
+      "name": "Firestore REST collection /users - Read Page Size 10",
+      "category": "Firebase Performance",
+      "value": 759,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-081",
+      "name": "Firestore REST collection /logs - Write single doc",
+      "category": "Firebase Performance",
+      "value": 1312,
+      "threshold": 1800,
+      "unit": "ms",
+      "status": "Passed"
+    },
+    {
+      "id": "TC-LOAD-FB-082",
+      "name": "Firestore REST collection /metadata - Update query filters",
+      "category": "Firebase Performance",
+      "value": 538,
+      "threshold": 1000,
+      "unit": "ms",
+      "status": "Passed"
+    }
+  ]
+}
