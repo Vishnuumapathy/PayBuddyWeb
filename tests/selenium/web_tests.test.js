@@ -29,6 +29,7 @@ describe('PayBuddy Web Comprehensive E2E Test Suite', function() {
       // To show the browser window, we do not add the '--headless' argument
       options.addArguments('--disable-gpu');
       options.addArguments('--no-sandbox');
+      options.addArguments('--disable-dev-shm-usage');
       driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
     } catch (e) {
       console.log('Warning: Driver failed to initialize with Chrome options, falling back to standard Chrome:', e.message);
