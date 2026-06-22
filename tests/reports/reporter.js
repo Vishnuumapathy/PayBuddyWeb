@@ -63,6 +63,93 @@ async function generateReport(testResults) {
     return a.localeCompare(b);
   });
 
+  // Create Summary Dashboard sheet
+  const summarySheet = workbook.addWorksheet('Summary Dashboard');
+
+  // Title block
+  summarySheet.mergeCells('A1:D1');
+  const sumTitleRow = summarySheet.getRow(1);
+  sumTitleRow.getCell(1).value = 'PAYBUDDY WEB E2E TEST ANALYSIS DASHBOARD';
+  sumTitleRow.getCell(1).font = { name: 'Segoe UI', size: 14, bold: true, color: { argb: 'FFFFFFFF' } };
+  sumTitleRow.getCell(1).alignment = { horizontal: 'center', vertical: 'middle' };
+  sumTitleRow.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F2937' } }; // Dark charcoal/slate
+  sumTitleRow.height = 35;
+
+  summarySheet.addRow([]); // Blank spacer
+
+  const totalCount = testResults.length;
+  const passedCount = testResults.filter(r => r.status === 'Passed').length;
+  const failedCount = testResults.filter(r => r.status === 'Failed').length;
+  const passPercent = totalCount > 0 ? Math.round((passedCount / totalCount) * 100) : 0;
+  
+  // Calculate average response time
+  const msValues = testResults
+    .map(r => {
+      const match = r.time && r.time.match(/^(\d+)ms$/);
+      return match ? parseInt(match[1], 10) : 0;
+    })
+    .filter(val => val > 0);
+  const avgResponseTime = msValues.length > 0 ? Math.round(msValues.reduce((a, b) => a + b, 0) / msValues.length) : 0;
+  const overallStatus = failedCount === 0 ? 'PASS' : 'FAIL';
+
+  const addSumRow = (label, val) => {
+    const r = summarySheet.addRow([label, val]);
+    r.height = 22;
+    r.getCell(1).font = { name: 'Segoe UI', size: 10, bold: true };
+    r.getCell(2).font = { name: 'Segoe UI', size: 10 };
+    r.getCell(1).border = { bottom: { style: 'thin', color: { argb: 'FFE5E7EB' } } };
+    r.getCell(2).border = { bottom: { style: 'thin', color: { argb: 'FFE5E7EB' } } };
+    r.getCell(2).alignment = { horizontal: 'center' };
+    return r;
+  };
+
+  addSumRow('Total Test Cases', totalCount);
+  addSumRow('Passed', passedCount);
+  addSumRow('Failed', failedCount);
+  addSumRow('Pass Percentage', `${passPercent}%`);
+  addSumRow('Average Response Time', `${avgResponseTime}ms`);
+  
+  const statusRow = summarySheet.addRow(['Overall Status', overallStatus]);
+  statusRow.height = 26;
+  statusRow.getCell(1).font = { name: 'Segoe UI', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
+  statusRow.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF374151' } };
+  statusRow.getCell(1).alignment = { horizontal: 'center', vertical: 'middle' };
+  statusRow.getCell(2).font = { name: 'Segoe UI', size: 10, bold: true, color: overallStatus === 'PASS' ? { argb: 'FF065F46' } : { argb: 'FF991B1B' } };
+  statusRow.getCell(2).fill = { type: 'pattern', pattern: 'solid', fgColor: overallStatus === 'PASS' ? { argb: 'D1FAE5' } : { argb: 'FEE2E2' } };
+  statusRow.getCell(2).alignment = { horizontal: 'center', vertical: 'middle' };
+
+  summarySheet.addRow([]); // Blank spacer
+  summarySheet.addRow([]); // Blank spacer
+
+  // Category Breakdown table
+  const breakHeader = summarySheet.addRow(['Category', 'Total Tests', 'Passed', 'Failed']);
+  breakHeader.height = 24;
+  breakHeader.eachCell(c => {
+    c.font = { name: 'Segoe UI', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
+    c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4B5563' } }; // medium gray
+    c.alignment = { horizontal: 'center', vertical: 'middle' };
+  });
+
+  categories.forEach(cat => {
+    const list = groupedResults[cat] || [];
+    const p = list.filter(t => t.status === 'Passed').length;
+    const f = list.filter(t => t.status === 'Failed').length;
+    const row = summarySheet.addRow([cat, list.length, p, f]);
+    row.height = 20;
+    row.eachCell((cell, colIndex) => {
+      cell.font = { name: 'Segoe UI', size: 9 };
+      cell.border = { bottom: { style: 'thin', color: { argb: 'FFE5E7EB' } } };
+      if (colIndex > 1) {
+        cell.alignment = { horizontal: 'center' };
+      }
+    });
+  });
+
+  summarySheet.getColumn(1).width = 28;
+  summarySheet.getColumn(2).width = 16;
+  summarySheet.getColumn(3).width = 12;
+  summarySheet.getColumn(4).width = 12;
+
   // Helper to sanitize category names for Excel sheets (no /, \, ?, *, :, [, ])
   function sanitizeSheetName(name) {
     let sanitized = name.replace(/[\\/?:*[\]]/g, '-');
