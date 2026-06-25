@@ -226,6 +226,41 @@ async function generateReport(testResults) {
   } catch (err) {
     console.warn(`\n[WARNING] Failed to write Excel report: ${err.message}.\nIf the file is open in Excel, please close it and run the tests again.\n`);
   }
+
+  // Write to GitHub Actions summary if running in CI
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    try {
+      const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+      const statusEmoji = overallStatus === 'PASS' ? '🟢 PASS' : '🔴 FAIL';
+      
+      let md = `## 📊 PayBuddy Web E2E Test Execution Summary\n\n`;
+      md += `| Metric | Value |\n`;
+      md += `| :--- | :--- |\n`;
+      md += `| **Total Test Cases** | ${totalCount} |\n`;
+      md += `| **Passed** | ✅ ${passedCount} |\n`;
+      md += `| **Failed** | ${failedCount > 0 ? '❌ ' : ''}${failedCount} |\n`;
+      md += `| **Pass Percentage** | **${passPercent}%** |\n`;
+      md += `| **Average Response Time** | ⏱️ ${avgResponseTime}ms |\n`;
+      md += `| **Overall Status** | **${statusEmoji}** |\n\n`;
+
+      md += `### 📂 Category Breakdown\n\n`;
+      md += `| Category | Total Tests | Passed | Failed | Pass % |\n`;
+      md += `| :--- | :---: | :---: | :---: | :---: |\n`;
+      categories.forEach(cat => {
+        const list = groupedResults[cat] || [];
+        const p = list.filter(t => t.status === 'Passed').length;
+        const f = list.filter(t => t.status === 'Failed').length;
+        const pct = list.length > 0 ? Math.round((p / list.length) * 100) : 0;
+        md += `| **${cat}** | ${list.length} | ${p} | ${f} | ${pct}% |\n`;
+      });
+      md += `\n`;
+
+      fs.appendFileSync(summaryPath, md, 'utf8');
+      console.log('Successfully wrote E2E test results to GITHUB_STEP_SUMMARY');
+    } catch (summaryErr) {
+      console.warn(`[WARNING] Failed to write to GITHUB_STEP_SUMMARY: ${summaryErr.message}`);
+    }
+  }
 }
 
 module.exports = { generateReport };

@@ -1065,6 +1065,55 @@ async function executePerformanceScans() {
   fs.writeFileSync(htmlPath, htmlContent);
   console.log(`HTML report successfully saved to: ${htmlPath}`);
   console.log(`\nLoad testing complete. ${totalCount} of ${totalCount} cases evaluated.`);
+
+  // Write to GitHub Actions summary if running in CI
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    try {
+      const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+      const statusEmoji = overallStatus === 'PASS' ? '🟢 PASS' : '🔴 FAIL';
+      
+      let md = `## ⚡ PayBuddy Web Performance & Load Test Summary\n\n`;
+      md += `| Metric | Value |\n`;
+      md += `| :--- | :--- |\n`;
+      md += `| **Total Load Scans** | ${totalCount} |\n`;
+      md += `| **Passed** | ✅ ${passedCount} |\n`;
+      md += `| **Failed** | ${failedCount > 0 ? '❌ ' : ''}${failedCount} |\n`;
+      md += `| **Pass Ratio** | **${passPercent}%** |\n`;
+      md += `| **Avg Response Latency** | ⏱️ ${avgResponseTime}ms |\n`;
+      md += `| **Overall Assessment** | **${statusEmoji}** |\n\n`;
+
+      // Category Breakdown for Load Tests
+      const groupedLoad = {};
+      testCases.forEach(t => {
+        const cat = t.category || 'General';
+        if (!groupedLoad[cat]) groupedLoad[cat] = [];
+        groupedLoad[cat].push(t);
+      });
+
+      md += `### 📂 Performance Category Breakdown\n\n`;
+      md += `| Category | Total Scans | Passed | Failed | Pass % | Avg Latency |\n`;
+      md += `| :--- | :---: | :---: | :---: | :---: | :---: |\n`;
+      categoryOrder.forEach(cat => {
+        const list = groupedLoad[cat] || [];
+        const p = list.filter(r => r.status === 'Passed').length;
+        const f = list.filter(r => r.status === 'Failed').length;
+        const pct = list.length > 0 ? Math.round((p / list.length) * 100) : 0;
+        
+        // Avg latency for this category (only cases with unit 'ms')
+        const msList = list.filter(t => t.unit === 'ms');
+        const avg = msList.length ? Math.round(msList.reduce((sum, item) => sum + item.value, 0) / msList.length) : 0;
+        const avgStr = avg > 0 ? `${avg}ms` : 'N/A';
+        
+        md += `| **${cat}** | ${list.length} | ${p} | ${f} | ${pct}% | ${avgStr} |\n`;
+      });
+      md += `\n`;
+
+      fs.appendFileSync(summaryPath, md, 'utf8');
+      console.log('Successfully wrote Load test results to GITHUB_STEP_SUMMARY');
+    } catch (summaryErr) {
+      console.warn(`[WARNING] Failed to write to GITHUB_STEP_SUMMARY: ${summaryErr.message}`);
+    }
+  }
 }
 
 executePerformanceScans().catch(console.error);
