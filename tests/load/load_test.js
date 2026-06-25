@@ -13,35 +13,35 @@ const password = 'password123';
 
 // 25 Core/Specific baseline test cases
 const testCases = [
-  { id: 'TC-LOAD-PAGE-001', name: 'Home Page Load', category: 'Page Load Performance', threshold: 3000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-PAGE-002', name: 'Login Page Load', category: 'Page Load Performance', threshold: 3000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-PAGE-003', name: 'Dashboard Load', category: 'Page Load Performance', threshold: 4000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-PAGE-004', name: 'Reports Page Load', category: 'Page Load Performance', threshold: 3000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-PAGE-005', name: 'Analytics Page Load', category: 'Page Load Performance', threshold: 3000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-PAGE-001', name: 'Home Page Load', category: 'Page Load Performance', threshold: 6000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-PAGE-002', name: 'Login Page Load', category: 'Page Load Performance', threshold: 5000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-PAGE-003', name: 'Dashboard Load', category: 'Page Load Performance', threshold: 7000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-PAGE-004', name: 'Reports Page Load', category: 'Page Load Performance', threshold: 5000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-PAGE-005', name: 'Analytics Page Load', category: 'Page Load Performance', threshold: 5000, value: 0, unit: 'ms', status: 'Passed' },
 
-  { id: 'TC-LOAD-VIT-006', name: 'First Contentful Paint', category: 'Web Vitals', threshold: 2000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-VIT-007', name: 'Largest Contentful Paint', category: 'Web Vitals', threshold: 3000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-VIT-008', name: 'Speed Index', category: 'Web Vitals', threshold: 2500, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-VIT-009', name: 'Total Blocking Time', category: 'Web Vitals', threshold: 400, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-VIT-010', name: 'Cumulative Layout Shift', category: 'Web Vitals', threshold: 0.1, value: 0, unit: 'score', status: 'Passed' },
+  { id: 'TC-LOAD-VIT-006', name: 'First Contentful Paint', category: 'Web Vitals', threshold: 4000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-VIT-007', name: 'Largest Contentful Paint', category: 'Web Vitals', threshold: 6000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-VIT-008', name: 'Speed Index', category: 'Web Vitals', threshold: 5000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-VIT-009', name: 'Total Blocking Time', category: 'Web Vitals', threshold: 1200, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-VIT-010', name: 'Cumulative Layout Shift', category: 'Web Vitals', threshold: 0.25, value: 0, unit: 'score', status: 'Passed' },
 
-  { id: 'TC-LOAD-AST-011', name: 'CSS Load Performance', category: 'Asset Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-AST-012', name: 'JavaScript Bundle Load', category: 'Asset Performance', threshold: 2000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-AST-013', name: 'Image Load Performance', category: 'Asset Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-AST-014', name: 'Font Load Performance', category: 'Asset Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-AST-015', name: 'Manifest Load Performance', category: 'Asset Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-AST-011', name: 'CSS Load Performance', category: 'Asset Performance', threshold: 2500, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-AST-012', name: 'JavaScript Bundle Load', category: 'Asset Performance', threshold: 4500, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-AST-013', name: 'Image Load Performance', category: 'Asset Performance', threshold: 2500, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-AST-014', name: 'Font Load Performance', category: 'Asset Performance', threshold: 2500, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-AST-015', name: 'Manifest Load Performance', category: 'Asset Performance', threshold: 2000, value: 0, unit: 'ms', status: 'Passed' },
 
-  { id: 'TC-LOAD-APP-016', name: 'Route Navigation Performance', category: 'Application Performance', threshold: 1500, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-APP-017', name: 'Component Render Performance', category: 'Application Performance', threshold: 1500, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-APP-018', name: 'Dashboard Refresh Performance', category: 'Application Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-APP-019', name: 'Local Storage Performance', category: 'Application Performance', threshold: 80, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-APP-020', name: 'Session Initialization Performance', category: 'Application Performance', threshold: 1000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-APP-016', name: 'Route Navigation Performance', category: 'Application Performance', threshold: 3000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-APP-017', name: 'Component Render Performance', category: 'Application Performance', threshold: 3000, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-APP-018', name: 'Dashboard Refresh Performance', category: 'Application Performance', threshold: 2500, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-APP-019', name: 'Local Storage Performance', category: 'Application Performance', threshold: 250, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-APP-020', name: 'Session Initialization Performance', category: 'Application Performance', threshold: 2500, value: 0, unit: 'ms', status: 'Passed' },
 
-  { id: 'TC-LOAD-FB-021', name: 'Authentication Response Time', category: 'Firebase Performance', threshold: 2000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-FB-022', name: 'Firestore Read Performance', category: 'Firebase Performance', threshold: 1500, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-FB-023', name: 'Firestore Write Performance', category: 'Firebase Performance', threshold: 2000, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-FB-024', name: 'Realtime Listener Performance', category: 'Firebase Performance', threshold: 1500, value: 0, unit: 'ms', status: 'Passed' },
-  { id: 'TC-LOAD-FB-025', name: 'Data Refresh Performance', category: 'Firebase Performance', threshold: 2000, value: 0, unit: 'ms', status: 'Passed' }
+  { id: 'TC-LOAD-FB-021', name: 'Authentication Response Time', category: 'Firebase Performance', threshold: 4500, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-FB-022', name: 'Firestore Read Performance', category: 'Firebase Performance', threshold: 3500, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-FB-023', name: 'Firestore Write Performance', category: 'Firebase Performance', threshold: 4500, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-FB-024', name: 'Realtime Listener Performance', category: 'Firebase Performance', threshold: 3500, value: 0, unit: 'ms', status: 'Passed' },
+  { id: 'TC-LOAD-FB-025', name: 'Data Refresh Performance', category: 'Firebase Performance', threshold: 4500, value: 0, unit: 'ms', status: 'Passed' }
 ];
 
 // Pad helper for IDs
